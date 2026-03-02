@@ -17,22 +17,20 @@ var listUsers []entity.Users
 var conn *pgx.Conn
 
 // start - connection database
-func InitDB() {
+func InitDB() error {
 	connConfig, err := pgx.ParseConfig("")
 	if err != nil {
-		fmt.Println("Failed to parse config")
-		return
+		return fmt.Errorf("Failed to parse config: %w\n", err)
 	}
 
 	conDb, err := pgx.Connect(context.Background(), connConfig.ConnString())
 	if err != nil {
-		fmt.Println("Failed to connect to db")
-		return
+		return fmt.Errorf("Failed to connect to db: %w\n", err)
 	}
 
 	conn = conDb
 	// end - connection database
-
+	return nil
 }
 
 func Register(ctx *gin.Context) {

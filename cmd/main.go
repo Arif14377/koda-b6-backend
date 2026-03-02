@@ -46,7 +46,9 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	handler.InitDB()
+	if err := handler.InitDB(); err != nil {
+		log.Fatalf("gagal connect db: %v", err)
+	}
 
 	// database := os.Getenv("DATABASE")
 	port := os.Getenv("PORT")
