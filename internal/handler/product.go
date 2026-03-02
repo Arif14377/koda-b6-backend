@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/arif14377/koda-b6-backend1/internal/entity"
+	"github.com/arif14377/koda-b6-backend/internal/entity"
 	"github.com/gin-gonic/gin"
 )
 
