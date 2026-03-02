@@ -3,12 +3,15 @@ package main
 import (
 	"log"
 
+	"github.com/arif14377/koda-b6-backend1/internal/cors"
 	"github.com/arif14377/koda-b6-backend1/internal/handler"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
+
+	r.Use(cors.Middleware())
 
 	// AUTH
 	// register
