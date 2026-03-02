@@ -16,3 +16,9 @@ type Users struct {
 	Updated_At time.Time `json:"updated_at"`
 	Updated_By *string   `json:"updated_by"`
 }
+
+type UserListRead struct {
+	Id       int    `json:"id"`
+	FullName string `json:"fullName"`
+	Email    string `json:"email"`
+}

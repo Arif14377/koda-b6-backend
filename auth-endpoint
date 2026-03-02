@@ -6,7 +6,7 @@ Content-Type: application/json
     "fullName": "Koda",
     "email": "koda@mail.com",
     "password": "1234"
-},
+}
 
 ###
 GET /users HTTP/1.1

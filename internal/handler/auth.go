@@ -1,16 +1,39 @@
 package handler
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"slices"
 	"strconv"
 	"strings"
 
 	"github.com/arif14377/koda-b6-backend/internal/entity"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 )
 
 var listUsers []entity.Users
+var conn *pgx.Conn
+
+// start - connection database
+func InitDB() {
+	connConfig, err := pgx.ParseConfig("")
+	if err != nil {
+		fmt.Println("Failed to parse config")
+		return
+	}
+
+	conDb, err := pgx.Connect(context.Background(), connConfig.ConnString())
+	if err != nil {
+		fmt.Println("Failed to connect to db")
+		return
+	}
+
+	conn = conDb
+	// end - connection database
+
+}
 
 func Register(ctx *gin.Context) {
 	data := entity.Users{}
@@ -126,11 +149,42 @@ func Login(ctx *gin.Context) {
 }
 
 func GetUsers(ctx *gin.Context) {
+	if conn == nil {
+		ctx.JSON(http.StatusBadRequest, entity.Response{
+			Success: false,
+			Message: "conn == nil",
+		})
+		return
+	}
+
+	rows, err := conn.Query(context.Background(),
+		`SELECT id, full_name, email FROM users`,
+	)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, entity.Response{
+			Success: false,
+			Message: "gagal select users",
+		})
+		return
+	}
+
+	users, err := pgx.CollectRows(rows, pgx.RowToStructByNameLax[entity.UserListRead])
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, entity.Response{
+			Success: false,
+			Message: "Failed to get data users",
+		})
+		return
+	}
+
 	ctx.JSON(200, entity.Response{
 		Success: true,
 		Message: "List Users:",
-		Results: listUsers,
+		Results: users,
 	})
+
 }
 
 func UserDetails(ctx *gin.Context) {

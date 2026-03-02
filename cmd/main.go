@@ -24,7 +24,7 @@ func main() {
 	// get all users
 	r.GET("/users", handler.GetUsers)
 	// check user details
-	r.GET("users/:id", handler.UserDetails)
+	r.GET("/users/:id", handler.UserDetails)
 	// delete user
 	r.DELETE("/users/:id", handler.DeleteUser)
 	// update data user
@@ -45,6 +45,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	handler.InitDB()
 
 	// database := os.Getenv("DATABASE")
 	port := os.Getenv("PORT")
