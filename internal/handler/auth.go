@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"slices"
 	"strconv"
@@ -11,10 +12,12 @@ import (
 	"github.com/arif14377/koda-b6-backend/internal/entity"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
+	"github.com/matthewhartstonge/argon2"
 )
 
 var listUsers []entity.Users
 var conn *pgx.Conn
+var argon argon2.Config
 
 // start - connection database
 func InitDB() error {
@@ -82,6 +85,15 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
+	argon = argon2.DefaultConfig()
+
+	encoded, err := argon.HashEncoded([]byte(data.Password))
+	if err != nil {
+		log.Fatalf("Error encode %v\n", err)
+		return
+	}
+
+	data.Password = string(encoded)
 	data.Id = len(listUsers) + 1
 	listUsers = append(listUsers, data)
 	ctx.JSON(200, entity.Response{
@@ -121,7 +133,8 @@ func Login(ctx *gin.Context) {
 
 	for _, u := range listUsers {
 		if u.Email == data.Email {
-			if u.Email == data.Email && u.Password == data.Password {
+			pwdOk, _ := argon2.VerifyEncoded([]byte(data.Password), []byte(u.Password))
+			if u.Email == data.Email && pwdOk {
 				login = true
 			} else {
 				ctx.JSON(400, entity.Response{
