@@ -93,9 +93,30 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
+	if conn == nil {
+		ctx.JSON(http.StatusBadRequest, entity.Response{
+			Success: false,
+			Message: "conn == nil",
+		})
+		return
+	}
+
 	data.Password = string(encoded)
-	data.Id = len(listUsers) + 1
-	listUsers = append(listUsers, data)
+	// data.Id = len(listUsers) + 1 //sudah increment dari DB
+
+	_, err = conn.Exec(context.Background(),
+		`INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3)`, data.FullName, data.Email, data.Password,
+	)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, entity.Response{
+			Success: false,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	// listUsers = append(listUsers, data) // upgraded
 	ctx.JSON(200, entity.Response{
 		Success: true,
 		Message: "Registrasi berhasil.",
