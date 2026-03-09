@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"slices"
 	"strconv"
 	"strings"
 
@@ -249,22 +248,29 @@ func UserDetails(ctx *gin.Context) {
 
 func DeleteUser(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
-	notFound := true
+	// notFound := true
 
-	for i, u := range listUsers {
-		if u.Id == id {
-			listUsers = slices.Delete(listUsers, i, i+1)
-			notFound = false
-			break
-		}
-	}
+	// for i, u := range listUsers {
+	// 	if u.Id == id {
+	// 		listUsers = slices.Delete(listUsers, i, i+1)
+	// 		notFound = false
+	// 		break
+	// 	}
+	// }
 
-	if notFound {
-		ctx.JSON(404, entity.Response{
-			Success: false,
-			Message: "User tidak ditemukan",
-		})
-		return
+	// if notFound {
+	// 	ctx.JSON(404, entity.Response{
+	// 		Success: false,
+	// 		Message: "User tidak ditemukan",
+	// 	})
+	// 	return
+	// }
+
+	_, err := conn.Exec(context.Background(),
+		`DELETE FROM users where id = $1`, id,
+	)
+	if err != nil {
+		log.Fatalf("Failed to delete user: %v", err)
 	}
 
 	ctx.JSON(200, entity.Response{
