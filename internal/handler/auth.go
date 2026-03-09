@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/arif14377/koda-b6-backend/internal/entity"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5"
 	"github.com/matthewhartstonge/argon2"
 )
@@ -31,9 +34,24 @@ func InitDB() error {
 	}
 
 	conn = conDb
-	// end - connection database
 	return nil
 }
+
+// end - connection database
+
+// start - create JWT (Hmac)
+func ClaimJWT(userID int) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": userID,
+		"expired": time.Now().Add(time.Second * 20),
+	})
+
+	tokenString, err := token.SignedString(os.Getenv("JWT_SECRET"))
+
+	fmt.Println(tokenString, err)
+}
+
+// end - create JWT (Hmac)
 
 func Register(ctx *gin.Context) {
 	data := entity.Users{}
@@ -103,6 +121,13 @@ func Register(ctx *gin.Context) {
 	data.Password = string(encoded)
 	// data.Id = len(listUsers) + 1 //sudah increment dari DB
 
+	// entity.Users
+	// conn.Exec(ctx, `
+	// CREATE TABLE IF NOT EXISTS (
+	// 	id,
+	// )
+	// `)
+
 	_, err = conn.Exec(context.Background(),
 		`INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3)`, data.FullName, data.Email, data.Password,
 	)
@@ -171,6 +196,7 @@ func Login(ctx *gin.Context) {
 			Success: true,
 			Message: fmt.Sprintf("Welcome %s", data.Email),
 		})
+		ClaimJWT(data.Id)
 	} else {
 		ctx.JSON(401, entity.Response{
 			Success: false,
