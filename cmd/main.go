@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/arif14377/koda-b6-backend/internal/cors"
 	"github.com/arif14377/koda-b6-backend/internal/handler"
+	"github.com/arif14377/koda-b6-backend/internal/middleware/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
