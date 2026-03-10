@@ -45,12 +45,15 @@ migrate create -ext sql -dir migrations -seq init_db
 ```
     - setelah terinstall akan ada 2 file di folder yang dibuat, yaitu file up dan down.
     - file up untuk create DDL, file down untuk create ddl (drop).
-
-- Menjalankan migration
+### Menjalankan migration
 ```bash
 # $ migrate -source file://path/to/migrations -database postgres://localhost:5432/nama_database up 2
 
 migrate -source file://./migrations -database postgres://postgres:1@localhost:5432/weekly-db?sslmode=disable up
+
+migrate -source file://./migrations -database postgres://postgres:1@localhost:5432/weekly-db?sslmode=disable down
+
+migrate -source file://./migrations -database postgres://postgres:1@localhost:5432/weekly-db?sslmode=disable force 1
 
 # ada flag (pahami penggunaannya)
 # jika migrasi tidak pakai angka maka akan menjalankan semua migrasi sisanya yang belum dijalankan.

@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS product_size;
 
 DROP TABLE IF EXISTS product_images;
 
-
 DROP TABLE IF EXISTS reviews;
 
 DROP TABLE IF EXISTS transaction_product;
