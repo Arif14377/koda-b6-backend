@@ -16,8 +16,7 @@ func NewForgotPasswordService(fpRepo *repository.ForgotPassword, userRepo *repos
 	}
 }
 
-// TODO:
-func (fp *ForgotPasswordService) ForgotPassword(email string, code int) error {
+func (fp *ForgotPasswordService) ForgotPassword(email, password string, code int) error {
 	_, err := fp.fpRepo.GetUserByEmail(email)
 	if err != nil {
 		return err
@@ -28,9 +27,22 @@ func (fp *ForgotPasswordService) ForgotPassword(email string, code int) error {
 		return err
 	}
 
-	// TODO: panggil method repo ganti password
+	hashPassword := HashingPassword(password)
 
-	// TODO: panggil method repo hapus
+	err = fp.fpRepo.UpdatePassword(email, hashPassword)
+	if err != nil {
+		return err
+	}
+
+	err = fp.fpRepo.DeleteCode(email, code)
+	if err != nil {
+		return err
+	}
 
 	return err
+}
+
+// TODO: hashing password dengan argon
+func HashingPassword(password string) string {
+	return ""
 }

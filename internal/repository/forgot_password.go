@@ -27,7 +27,6 @@ func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPassword {
 // 7. Jika sesuai maka ubah password di table users.
 // 8. Hapus code di table forgot_password
 
-// TODO: add method get user by email
 func (fp *ForgotPassword) GetUserByEmail(email string) (*models.ForgotPassword, error) {
 	rows, err := fp.db.Query(context.Background(), "SELECT email FROM users WHERE email = $1", email)
 	if err != nil {
@@ -45,7 +44,6 @@ func (fp *ForgotPassword) GetUserByEmail(email string) (*models.ForgotPassword, 
 	return &data, err //selenjutnya generate code dan disimpan ke db table forgot_password
 }
 
-// TODO: get user by code
 func (fp *ForgotPassword) GetUserByEmailCode(email string, code int) (*models.ForgotPassword, error) {
 	rows, err := fp.db.Query(context.Background(), "SELECT email, code FROM forgot_password WHERE email = $1 AND code = $2", email, code)
 	if err != nil {
@@ -63,12 +61,19 @@ func (fp *ForgotPassword) GetUserByEmailCode(email string, code int) (*models.Fo
 	return &data, err //selanjutnya ubah password
 }
 
-// TODO: add method delete user by code
 func (fp *ForgotPassword) UpdatePassword(email, hashPassword string) error {
 	_, err := fp.db.Exec(context.Background(), "UPDATE users SET password = $1 WHERE email = $2", hashPassword, email)
 	if err != nil {
 		return err
 	}
 
+	return nil
+}
+
+func (fp *ForgotPassword) DeleteCode(email string, code int) error {
+	_, err := fp.db.Exec(context.Background(), "UPDATE forgot_password SET code = NULL WHERE email = $1 AND code = $2", email, code)
+	if err != nil {
+		return err
+	}
 	return nil
 }
