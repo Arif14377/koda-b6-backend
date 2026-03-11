@@ -1,10 +1,6 @@
 package repository
 
 import (
-	"context"
-	"fmt"
-
-	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -27,53 +23,36 @@ func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPassword {
 // 7. Jika sesuai maka ubah password di table users.
 // 8. Hapus code di table forgot_password
 
-func (fp *ForgotPassword) GetUserByEmail(email string) (*models.ForgotPassword, error) {
-	rows, err := fp.db.Query(context.Background(), "SELECT email FROM users WHERE email = $1", email)
-	if err != nil {
-		r := fmt.Errorf("Failed to get rows data: %w\n", err)
-		return &models.ForgotPassword{}, r
-	}
-	defer rows.Close()
+// func (fp *ForgotPassword) GetUserByEmailCode(email string, code int) (*models.ForgotPassword, error) {
+// 	rows, err := fp.db.Query(context.Background(), "SELECT email, code FROM forgot_password WHERE email = $1 AND code = $2", email, code)
+// 	if err != nil {
+// 		r := fmt.Errorf("Failed to get rows data: %w\n", err)
+// 		return &models.ForgotPassword{}, r
+// 	}
+// 	defer rows.Close()
 
-	data, err := pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[models.ForgotPassword])
-	if err != nil {
-		r := fmt.Errorf("User not found: %w\n", err)
-		return &models.ForgotPassword{}, r
-	}
+// 	data, err := pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[models.ForgotPassword])
+// 	if err != nil {
+// 		r := fmt.Errorf("The Email or Code is wrong: %w\n", err)
+// 		return &models.ForgotPassword{}, r
+// 	}
 
-	return &data, err //selenjutnya generate code dan disimpan ke db table forgot_password
-}
+// 	return &data, nil //selanjutnya ubah password
+// }
 
-func (fp *ForgotPassword) GetUserByEmailCode(email string, code int) (*models.ForgotPassword, error) {
-	rows, err := fp.db.Query(context.Background(), "SELECT email, code FROM forgot_password WHERE email = $1 AND code = $2", email, code)
-	if err != nil {
-		r := fmt.Errorf("Failed to get rows data: %w\n", err)
-		return &models.ForgotPassword{}, r
-	}
-	defer rows.Close()
+// func (fp *ForgotPassword) UpdatePassword(email, hashPassword string) error {
+// 	_, err := fp.db.Exec(context.Background(), "UPDATE users SET password = $1 WHERE email = $2", hashPassword, email)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	data, err := pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[models.ForgotPassword])
-	if err != nil {
-		r := fmt.Errorf("The Email or Code is wrong: %w\n", err)
-		return &models.ForgotPassword{}, r
-	}
+// 	return nil
+// }
 
-	return &data, err //selanjutnya ubah password
-}
-
-func (fp *ForgotPassword) UpdatePassword(email, hashPassword string) error {
-	_, err := fp.db.Exec(context.Background(), "UPDATE users SET password = $1 WHERE email = $2", hashPassword, email)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (fp *ForgotPassword) DeleteCode(email string, code int) error {
-	_, err := fp.db.Exec(context.Background(), "UPDATE forgot_password SET code = NULL WHERE email = $1 AND code = $2", email, code)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+// func (fp *ForgotPassword) DeleteCode(email string, code int) error {
+// 	_, err := fp.db.Exec(context.Background(), "UPDATE forgot_password SET code = NULL WHERE email = $1 AND code = $2", email, code)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }

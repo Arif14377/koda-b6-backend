@@ -8,12 +8,12 @@ import (
 )
 
 type UserHandler struct {
-	service *service.UserService
+	userService *service.UserService
 }
 
 func NewUserHandler(service *service.UserService) *UserHandler {
 	return &UserHandler{
-		service: service,
+		userService: service,
 	}
 }
 
@@ -21,6 +21,34 @@ func (u *UserHandler) GetAllUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "List all users",
-		"results": u.service.GetAllUser(),
+		"results": u.userService.GetAllUser(),
+	})
+}
+
+func (u *UserHandler) GetUserByEmail(ctx *gin.Context) {
+	email, isEmailSet := ctx.GetQuery("email")
+	if !isEmailSet || email == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Email not set.",
+		})
+		return
+	}
+
+	exists := u.userService.GetUserByEmail(email)
+	if !exists {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"message": "User not found",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "User found",
+		"results": gin.H{
+			"email": email,
+		},
 	})
 }

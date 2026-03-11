@@ -18,3 +18,7 @@ func NewUserService(repo *repository.UserRepository) *UserService {
 func (u *UserService) GetAllUser() *[]models.UserListRead {
 	return u.repo.GetAllUser()
 }
+
+func (u *UserService) GetUserByEmail(email string) bool {
+	return u.repo.GetUserByEmail(email)
+}

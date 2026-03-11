@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
@@ -38,4 +39,21 @@ func (u *UserRepository) GetAllUser() *[]models.UserListRead {
 
 func (u *UserRepository) GetUserByID() {
 
+}
+
+func (fp *UserRepository) GetUserByEmail(email string) bool {
+	rows, err := fp.db.Query(context.Background(), "SELECT email FROM users WHERE email = $1", email)
+	if err != nil {
+		fmt.Printf("Failed to get rows data: %v\n", err)
+		return false
+	}
+	defer rows.Close()
+
+	_, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[models.ForgotPassword])
+	if err != nil {
+		fmt.Printf("User not found: %v\n", err)
+		return false
+	}
+
+	return true
 }

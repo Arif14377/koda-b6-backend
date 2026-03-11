@@ -17,6 +17,10 @@ Host: localhost:8888
 GET /users/1 HTTP/1.1
 Host: localhost:8888
 
+### user by email
+GET /users/by-email?email=arif.rahman@gmail.com HTTP/1.1
+Host: localhost:8888
+
 ### delete user
 DELETE /users/11 HTTP/1.1
 Host: localhost:8888
