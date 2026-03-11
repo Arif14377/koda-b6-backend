@@ -18,6 +18,11 @@ func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPasswordRepository {
 }
 
 func (fp *ForgotPasswordRepository) GenerateOTP(email string, otp *big.Int) {
+	cmdTag, _ := fp.db.Exec(context.Background(), "UPDATE forgot_password SET code = $1 WHERE email = $2", otp, email)
+	if cmdTag.RowsAffected() > 0 {
+		return
+	}
+
 	fp.db.Exec(context.Background(), "INSERT INTO forgot_password (email, code) VALUES ($1, $2)", email, otp)
 }
 
