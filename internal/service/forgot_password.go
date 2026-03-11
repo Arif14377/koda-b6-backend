@@ -1,23 +1,31 @@
 package service
 
 import (
+	"crypto/rand"
+	"fmt"
+	"math/big"
+
 	"github.com/arif14377/koda-b6-backend/internal/repository"
 )
 
 type ForgotPasswordService struct {
-	fpRepo   *repository.ForgotPassword
+	fpRepo   *repository.ForgotPasswordRepository
 	userRepo *repository.UserRepository
 }
 
-func NewForgotPasswordService(fpRepo *repository.ForgotPassword, userRepo *repository.UserRepository) *ForgotPasswordService {
+func NewForgotPasswordService(fpRepo *repository.ForgotPasswordRepository, userRepo *repository.UserRepository) *ForgotPasswordService {
 	return &ForgotPasswordService{
 		fpRepo:   fpRepo,
 		userRepo: userRepo,
 	}
 }
 
-func (fp *ForgotPasswordService) ForgotPassword(email string) bool {
-	return fp.userRepo.GetUserByEmail(email)
+func (fp *ForgotPasswordService) GenerateOTP(email string) {
+
+	otp, _ := rand.Int(rand.Reader, big.NewInt(1000000))
+
+	fp.fpRepo.GenerateOTP(email, otp)
+	fmt.Printf("Kode OTP Anda: %v\n", otp)
 }
 
 // func (fp *ForgotPasswordService) ForgotPassword(email, password string, code int) error {

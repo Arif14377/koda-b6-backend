@@ -22,11 +22,13 @@ func main() {
 	container := di.NewCointainer()
 
 	userHandler := container.UserHandler()
+	forgotPasswordHandler := container.ForgotPasswordHandler()
 
 	users := r.Group("/users")
 	{
 		users.GET("", userHandler.GetAllUser)
 		users.POST("/by-email", userHandler.GetUserByEmail)
+		users.POST("/forgot-password", forgotPasswordHandler.GenerateOTP)
 	}
 
 	r.Run("localhost:8888")

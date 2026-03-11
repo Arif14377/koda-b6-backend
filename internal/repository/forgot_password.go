@@ -1,17 +1,24 @@
 package repository
 
 import (
+	"context"
+	"math/big"
+
 	"github.com/jackc/pgx/v5"
 )
 
-type ForgotPassword struct {
+type ForgotPasswordRepository struct {
 	db *pgx.Conn
 }
 
-func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPassword {
-	return &ForgotPassword{
+func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPasswordRepository {
+	return &ForgotPasswordRepository{
 		db: db,
 	}
+}
+
+func (fp *ForgotPasswordRepository) GenerateOTP(email string, otp *big.Int) {
+	fp.db.Exec(context.Background(), "INSERT INTO forgot_password (email, code) VALUES ($1, $2)", email, otp)
 }
 
 // 1. Kirim email
