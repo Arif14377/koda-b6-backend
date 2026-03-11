@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/arif14377/koda-b6-backend/internal/service"
 	"github.com/gin-gonic/gin"
 )
@@ -26,16 +27,17 @@ func (u *UserHandler) GetAllUser(ctx *gin.Context) {
 }
 
 func (u *UserHandler) GetUserByEmail(ctx *gin.Context) {
-	email, isEmailSet := ctx.GetQuery("email")
-	if !isEmailSet || email == "" {
+	// email, isEmailSet := ctx.GetQuery("email")
+	var data models.UserEmail
+	err := ctx.ShouldBindJSON(&data)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": "Email not set.",
+			"message": "Input tidak valid",
 		})
-		return
 	}
 
-	exists := u.userService.GetUserByEmail(email)
+	exists := u.userService.GetUserByEmail(data.Email)
 	if !exists {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"success": false,
@@ -48,7 +50,7 @@ func (u *UserHandler) GetUserByEmail(ctx *gin.Context) {
 		"success": true,
 		"message": "User found",
 		"results": gin.H{
-			"email": email,
+			"email": data.Email,
 		},
 	})
 }

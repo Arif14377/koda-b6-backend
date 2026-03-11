@@ -24,3 +24,7 @@ type UserListRead struct {
 	Phone    string `json:"phone"`
 	Role     string `json:"role"`
 }
+
+type UserEmail struct {
+	Email string `json:"email"`
+}
