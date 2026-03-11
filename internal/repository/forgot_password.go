@@ -64,3 +64,11 @@ func (fp *ForgotPassword) GetUserByEmailCode(email string, code int) (*models.Fo
 }
 
 // TODO: add method delete user by code
+func (fp *ForgotPassword) UpdatePassword(email, hashPassword string) error {
+	_, err := fp.db.Exec(context.Background(), "UPDATE users SET password = $1 WHERE email = $2", hashPassword, email)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
