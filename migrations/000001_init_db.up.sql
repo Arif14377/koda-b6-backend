@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS categories (
     name VARCHAR(80)
 );
 
-CREATE TABLE IF NOT EXISTS roduct_category (
+CREATE TABLE IF NOT EXISTS product_category (
     id SERIAL PRIMARY KEY,
     product_id INT,
     category_id INT,

@@ -35,3 +35,7 @@ func (u *UserRepository) GetAllUser() *[]models.UserListRead {
 	return &users
 
 }
+
+func (u *UserRepository) GetUserByID() {
+
+}

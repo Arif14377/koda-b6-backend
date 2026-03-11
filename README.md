@@ -50,6 +50,19 @@ migrate create -ext sql -dir migrations -seq init_db
 ```
     - setelah terinstall akan ada 2 file di folder yang dibuat, yaitu file up dan down.
     - file up untuk create DDL, file down untuk create ddl (drop).
+
+### Isi file migration
+contoh:
+```sql
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(200) NOT NULL,
+    quantity INT,
+    price BIGINT
+);
+```
+
 ### Menjalankan migration
 ```bash
 # $ migrate -source file://path/to/migrations -database postgres://localhost:5432/nama_database up 2
