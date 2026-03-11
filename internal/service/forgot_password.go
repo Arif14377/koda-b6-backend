@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/arif14377/koda-b6-backend/internal/repository"
+	"github.com/matthewhartstonge/argon2"
 )
 
 type ForgotPasswordService struct {
@@ -27,7 +28,11 @@ func (fp *ForgotPasswordService) ForgotPassword(email, password string, code int
 		return err
 	}
 
-	hashPassword := HashingPassword(password)
+	var argon argon2.Config
+	hashPassword, err := HashingPassword(password, argon)
+	if err != nil {
+		return err
+	}
 
 	err = fp.fpRepo.UpdatePassword(email, hashPassword)
 	if err != nil {
@@ -43,6 +48,10 @@ func (fp *ForgotPasswordService) ForgotPassword(email, password string, code int
 }
 
 // TODO: hashing password dengan argon
-func HashingPassword(password string) string {
-	return ""
+func HashingPassword(password string, argon argon2.Config) (string, error) {
+	encoded, err := argon.HashEncoded([]byte(password))
+	if err != nil {
+		return "", err
+	}
+	return string(encoded), nil
 }
