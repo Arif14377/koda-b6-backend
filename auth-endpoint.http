@@ -18,8 +18,13 @@ GET /users/1 HTTP/1.1
 Host: localhost:8888
 
 ### user by email
-GET /users/by-email?email=arif.rahman@gmail.com HTTP/1.1
+GET /users/by-email HTTP/1.1
 Host: localhost:8888
+Content-Type: application/json
+
+{
+    "email": "arif.rahman@gmail.com"
+}
 
 ### delete user
 DELETE /users/11 HTTP/1.1
@@ -44,4 +49,13 @@ Content-Type: application/json
     "fullName": "Kodacademy",
     "email": "kodatech@gmail.com",
     "password": "1234"
+}
+
+### Request Forgot Password (Generate OTP)
+POST /users/forgot-password HTTP/1.1
+Host: localhost:8888
+Content-Type: application/json
+
+{
+    "email": "arif.rahman@gmail.com"
 }
