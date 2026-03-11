@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### list users
-GET /users HTTP/1.1
+GET /users/ HTTP/1.1
 Host: localhost:8888
 
 ### user by id

@@ -1,9 +1,9 @@
-package entity
+package models
 
 import "time"
 
 type Users struct {
-	Id         int       `json:"id"`
+	Id         string    `json:"id"`
 	FullName   string    `json:"fullName"`
 	Email      string    `json:"email"`
 	Password   string    `json:"password"`
@@ -18,7 +18,9 @@ type Users struct {
 }
 
 type UserListRead struct {
-	Id       int    `json:"id"`
+	Id       string `json:"id"`
 	FullName string `json:"fullName"`
 	Email    string `json:"email"`
+	Phone    string `json:"phone"`
+	Role     string `json:"role"`
 }

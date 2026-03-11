@@ -27,6 +27,11 @@ go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@lat
 
 Jika langkah selanjutnya tidak bisa karena command migrate not found, perlu cek dulu apakah binary sudah terinstall? jika sudah terinstall (sudah ada folder migrate), berarti pathnya belum diset.
 
+cek binary:
+```bash
+ls ~/go/bin
+```
+
 cara set path:
 - biasanya go menyimpan di : ~/go/bin
 - Jika pakai bash, maka bisa edit .bashrc:

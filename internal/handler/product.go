@@ -6,15 +6,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/arif14377/koda-b6-backend/internal/entity"
+	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/gin-gonic/gin"
 )
 
-var listProducts []entity.Products
+var listProducts []models.Products
 
 // get all products
 func GetProducts(c *gin.Context) {
-	c.JSON(200, entity.Response{
+	c.JSON(200, models.Response{
 		Success: true,
 		Message: "List products",
 		Results: listProducts,
@@ -24,7 +24,7 @@ func GetProducts(c *gin.Context) {
 // get product details
 func ProductDetails(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	product := entity.Products{}
+	product := models.Products{}
 	isExist := false
 
 	for _, p := range listProducts {
@@ -36,14 +36,14 @@ func ProductDetails(c *gin.Context) {
 	}
 
 	if !isExist {
-		c.JSON(404, entity.Response{
+		c.JSON(404, models.Response{
 			Success: false,
 			Message: "Product tidak ditemukan.",
 		})
 		return
 	}
 
-	c.JSON(200, entity.Response{
+	c.JSON(200, models.Response{
 		Success: true,
 		Message: fmt.Sprintf("Product detail id: %d", id),
 		Results: product,
@@ -52,11 +52,11 @@ func ProductDetails(c *gin.Context) {
 
 // add product
 func AddProduct(c *gin.Context) {
-	data := entity.Products{}
+	data := models.Products{}
 	err := c.ShouldBindJSON(&data)
 
 	if err != nil {
-		c.JSON(401, entity.Response{
+		c.JSON(401, models.Response{
 			Success: false,
 			Message: "JSON tidak valid",
 		})
@@ -65,7 +65,7 @@ func AddProduct(c *gin.Context) {
 
 	for _, p := range listProducts {
 		if strings.Contains(p.Name, data.Name) {
-			c.JSON(400, entity.Response{
+			c.JSON(400, models.Response{
 				Success: false,
 				Message: "Nama product sudah ada.",
 			})
@@ -74,7 +74,7 @@ func AddProduct(c *gin.Context) {
 	}
 
 	if data.Name == "" || data.Description == "" || data.Qty == 0 || data.Price == 0 {
-		c.JSON(400, entity.Response{
+		c.JSON(400, models.Response{
 			Success: false,
 			Message: "Data tidak boleh kosong.",
 		})
@@ -83,7 +83,7 @@ func AddProduct(c *gin.Context) {
 
 	data.Id = len(listProducts) + 1
 	listProducts = append(listProducts, data)
-	c.JSON(200, entity.Response{
+	c.JSON(200, models.Response{
 		Success: true,
 		Message: "Produk berhasil ditambahkan.",
 	})
@@ -103,14 +103,14 @@ func DeleteProduct(c *gin.Context) {
 	}
 
 	if !isExist {
-		c.JSON(404, entity.Response{
+		c.JSON(404, models.Response{
 			Success: false,
 			Message: "Id produk tidak ditemukan",
 		})
 		return
 	}
 
-	c.JSON(200, entity.Response{
+	c.JSON(200, models.Response{
 		Success: true,
 		Message: fmt.Sprintf("Data id ke-%d berhasil dihapus.", id),
 	})
@@ -119,11 +119,11 @@ func DeleteProduct(c *gin.Context) {
 // update product
 func UpdateProduct(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	data := entity.Products{}
+	data := models.Products{}
 	err := c.ShouldBindJSON(&data)
 
 	if err != nil {
-		c.JSON(401, entity.Response{
+		c.JSON(401, models.Response{
 			Success: false,
 			Message: "JSON tidak valid.",
 		})
@@ -132,7 +132,7 @@ func UpdateProduct(c *gin.Context) {
 
 	for _, p := range listProducts {
 		if strings.Contains(p.Name, data.Name) {
-			c.JSON(400, entity.Response{
+			c.JSON(400, models.Response{
 				Success: false,
 				Message: "Nama product sudah ada.",
 			})
@@ -141,7 +141,7 @@ func UpdateProduct(c *gin.Context) {
 	}
 
 	if data.Name == "" || data.Description == "" || data.Price == 0 {
-		c.JSON(400, entity.Response{
+		c.JSON(400, models.Response{
 			Success: false,
 			Message: "Data tidak boleh kosong.",
 		})
@@ -156,7 +156,7 @@ func UpdateProduct(c *gin.Context) {
 		}
 	}
 
-	c.JSON(200, entity.Response{
+	c.JSON(200, models.Response{
 		Success: true,
 		Message: "Data berhasil diupdate.",
 	})

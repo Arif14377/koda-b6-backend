@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS product_size (
         references products(id)
 );
 
-CREATE TABLE product_images (
+CREATE TABLE IF NOT EXISTS product_images (
     id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
     path VARCHAR(500),
@@ -34,7 +34,12 @@ CREATE TABLE product_images (
         REFERENCES products(id)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(10) CHECK (name IN('admin', 'user'))
+);
+
+CREATE TABLE IF NOT EXISTS users (
     ID VARCHAR(36) PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -42,10 +47,13 @@ CREATE TABLE users (
     address VARCHAR(200),
     phone VARCHAR(20),
     picture VARCHAR(500),
-    created_at TIMESTAMP DEFAULT NOW()
+    role_id INT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    CONSTRAINT fk_roles
+        FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
-CREATE TABLE cart (
+CREATE TABLE IF NOT EXISTS cart (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(36),
     product_id int,
@@ -58,7 +66,7 @@ CREATE TABLE cart (
 );
 
 
-CREATE TABLE reviews (
+CREATE TABLE IF NOT EXISTS reviews (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(36),
     messages VARCHAR,
@@ -68,7 +76,7 @@ CREATE TABLE reviews (
         references users(id)
 );
 
-CREATE TABLE transactions (
+CREATE TABLE IF NOT EXISTS transactions (
     id BIGSERIAL PRIMARY KEY,
     trx_code VARCHAR(50) UNIQUE NOT NULL,
     delivery_method VARCHAR(60) NOT NULL,
@@ -83,7 +91,7 @@ CREATE TABLE transactions (
     payment_method VARCHAR(100)
 );
 
-CREATE TABLE transaction_product (
+CREATE TABLE IF NOT EXISTS transaction_product (
     id SERIAL PRIMARY KEY,
     product_id INT,
     transaction_id INT,
@@ -96,12 +104,12 @@ CREATE TABLE transaction_product (
         REFERENCES transactions(id)
 );
 
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(80)
 );
 
-CREATE TABLE product_category (
+CREATE TABLE IF NOT EXISTS roduct_category (
     id SERIAL PRIMARY KEY,
     product_id INT,
     category_id INT,
