@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"math/big"
 
+	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -24,6 +26,22 @@ func (fp *ForgotPasswordRepository) GenerateOTP(email string, otp *big.Int) {
 	}
 
 	fp.db.Exec(context.Background(), "INSERT INTO forgot_password (email, code) VALUES ($1, $2)", email, otp)
+}
+
+func (fp *ForgotPasswordRepository) VerifikasiOTP(email string, otp *big.Int) (bool, error) {
+	rows, err := fp.db.Query(context.Background(), "SELECT email, code FROM forgot_password WHERE email = $1", email)
+	if err != nil {
+		return false, errors.New("Failed to get rows")
+	}
+	defer rows.Close()
+
+	data, err := pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[models.VerifOTP])
+
+	if data.Email != email || data.Code != otp {
+		return false, errors.New("Incorrect Email or OTP")
+	}
+
+	return true, nil
 }
 
 // 1. Kirim email

@@ -28,6 +28,17 @@ func (fp *ForgotPasswordService) GenerateOTP(email string) {
 	fmt.Printf("Kode OTP Anda: %v\n", otp)
 }
 
+// TODO: Verifikasi OTP
+func (fp *ForgotPasswordService) VerifikasiOTP(email string, otp *big.Int) error {
+	isTrue, err := fp.fpRepo.VerifikasiOTP(email, otp)
+
+	if !isTrue {
+		return err
+	}
+
+	return nil
+}
+
 // func (fp *ForgotPasswordService) ForgotPassword(email, password string, code int) error {
 // 	userExist := fp.userRepo.GetUserByEmail(email)
 // 	if userExist {

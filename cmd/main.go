@@ -29,6 +29,7 @@ func main() {
 		users.GET("", userHandler.GetAllUser)
 		users.POST("/by-email", userHandler.GetUserByEmail)
 		users.POST("/forgot-password", forgotPasswordHandler.GenerateOTP)
+		users.POST("/forgot-password/verifikasi-otp", forgotPasswordHandler.VerifikasiOTP)
 	}
 
 	r.Run("localhost:8888")

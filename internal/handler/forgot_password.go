@@ -44,7 +44,34 @@ func (fp *ForgotPasswordHandler) GenerateOTP(ctx *gin.Context) {
 	fp.fpService.GenerateOTP(data.Email)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"status":  true,
+		"success": true,
 		"message": "OTP successfully generated and sent to your email.",
+	})
+}
+
+func (fp *ForgotPasswordHandler) VerifikasiOTP(ctx *gin.Context) {
+	var data models.VerifOTP
+
+	err := ctx.ShouldBindJSON(&data)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Data input is not valid",
+		})
+		return
+	}
+
+	err = fp.fpService.VerifikasiOTP(data.Email, data.Code)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": err,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "OTP successfully verified.",
 	})
 }
