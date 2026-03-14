@@ -23,7 +23,7 @@ type Container struct {
 }
 
 func NewCointainer() *Container {
-	fmt.Println(os.Getenv("DATABASE_URL"))
+	// fmt.Println(os.Getenv("DATABASE_URL"))
 	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		fmt.Printf("Failed to connect database: %v", err)

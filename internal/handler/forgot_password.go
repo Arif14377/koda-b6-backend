@@ -62,10 +62,11 @@ func (fp *ForgotPasswordHandler) VerifikasiOTP(ctx *gin.Context) {
 	}
 
 	err = fp.fpService.VerifikasiOTP(data.Email, data.Code)
+	// fmt.Println(err)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": err,
+			"message": "Incorrect email or OTP",
 		})
 		return
 	}

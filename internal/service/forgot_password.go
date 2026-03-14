@@ -24,12 +24,13 @@ func (fp *ForgotPasswordService) GenerateOTP(email string) {
 
 	otp, _ := rand.Int(rand.Reader, big.NewInt(1000000))
 
-	fp.fpRepo.GenerateOTP(email, otp)
-	fmt.Printf("Kode OTP Anda: %v\n", otp)
+	otpValue := int(otp.Int64())
+	fp.fpRepo.GenerateOTP(email, otpValue)
+	fmt.Printf("Kode OTP Anda: %v\n", otpValue)
 }
 
 // TODO: Verifikasi OTP
-func (fp *ForgotPasswordService) VerifikasiOTP(email string, otp *big.Int) error {
+func (fp *ForgotPasswordService) VerifikasiOTP(email string, otp int) error {
 	isTrue, err := fp.fpRepo.VerifikasiOTP(email, otp)
 
 	if !isTrue {
