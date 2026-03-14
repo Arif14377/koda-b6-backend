@@ -41,15 +41,15 @@ func (u *UserRepository) GetUserByID() {
 
 }
 
-func (fp *UserRepository) GetUserByEmail(email string) bool {
-	rows, err := fp.db.Query(context.Background(), "SELECT email FROM users WHERE email = $1", email)
+func (u *UserRepository) GetUserByEmail(email string) bool {
+	rows, err := u.db.Query(context.Background(), "SELECT email FROM users WHERE email = $1", email)
 	if err != nil {
 		fmt.Printf("Failed to get rows data: %v\n", err)
 		return false
 	}
 	defer rows.Close()
 
-	_, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[models.ForgotPassword])
+	_, err = pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[models.UserEmail])
 	if err != nil {
 		fmt.Printf("User not found: %v\n", err)
 		return false
