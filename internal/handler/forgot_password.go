@@ -76,3 +76,29 @@ func (fp *ForgotPasswordHandler) VerifikasiOTP(ctx *gin.Context) {
 		"message": "OTP successfully verified.",
 	})
 }
+
+func (fp *ForgotPasswordHandler) ChangePassword(ctx *gin.Context) {
+	var data *models.ForgotPassword
+	err := ctx.ShouldBindJSON(&data)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Data input is not valid",
+		})
+		return
+	}
+
+	err = fp.fpService.ChangePassword(data)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": err,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Successfully change password",
+	})
+}

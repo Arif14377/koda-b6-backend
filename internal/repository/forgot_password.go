@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/jackc/pgx/v5"
@@ -51,6 +52,18 @@ func (fp *ForgotPasswordRepository) VerifikasiOTP(email string, otp int) (bool, 
 	}
 
 	return true, nil
+}
+
+func (fp *ForgotPasswordRepository) ChangePassword(email string, password string) error {
+	cmdTag, err := fp.db.Exec(context.Background(), "UPDATE users SET password=$1 WHERE email=$2", password, email)
+	if err != nil {
+		fmt.Printf("Failed to change password: %v\n", err)
+		return err
+	}
+	if cmdTag.RowsAffected() == 0 {
+		return errors.New("Email not found")
+	}
+	return nil
 }
 
 // 1. Kirim email

@@ -69,3 +69,14 @@ Content-Type: application/json
     "email": "arif.rahman@gmail.com",
     "code": 481272
 }
+
+### Change Password
+PATCH /users/forgot-password/change HTTP/1.1
+Host: localhost:8888
+Content-Type: application/json
+
+{
+    "email": "arif.rahman@gmail.com",
+    "newPassword": "Arif1234",
+    "confirmPassword": "Arif1234"
+}

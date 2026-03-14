@@ -2,10 +2,13 @@ package service
 
 import (
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"math/big"
 
+	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/arif14377/koda-b6-backend/internal/repository"
+	"github.com/matthewhartstonge/argon2"
 )
 
 type ForgotPasswordService struct {
@@ -29,7 +32,6 @@ func (fp *ForgotPasswordService) GenerateOTP(email string) {
 	fmt.Printf("Kode OTP Anda: %v\n", otpValue)
 }
 
-// TODO: Verifikasi OTP
 func (fp *ForgotPasswordService) VerifikasiOTP(email string, otp int) error {
 	isTrue, err := fp.fpRepo.VerifikasiOTP(email, otp)
 
@@ -37,6 +39,28 @@ func (fp *ForgotPasswordService) VerifikasiOTP(email string, otp int) error {
 		return err
 	}
 
+	return nil
+}
+
+func (fp *ForgotPasswordService) ChangePassword(data *models.ForgotPassword) error {
+
+	if data.NewPassword != data.ConfirmPassword {
+		err := errors.New("Password tidak sama.")
+		return err
+	}
+
+	argon := argon2.DefaultConfig()
+
+	encoded, err := argon.HashEncoded([]byte(data.NewPassword))
+	if err != nil {
+		r := fmt.Errorf("Failed to hashing password: %w", err)
+		return r
+	}
+
+	err = fp.fpRepo.ChangePassword(data.Email, string(encoded))
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
