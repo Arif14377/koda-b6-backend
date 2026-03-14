@@ -25,6 +25,7 @@ func main() {
 	forgotPasswordHandler := container.ForgotPasswordHandler()
 	authHandler := container.AuthHandler()
 	productHandler := container.ProductHandler()
+	reviewHandler := container.ReviewHandler()
 
 	users := r.Group("/users")
 	{
@@ -44,6 +45,7 @@ func main() {
 	public := r.Group("/")
 	{
 		public.GET("/products", productHandler.GetAllProducts)
+		public.GET("/reviews", reviewHandler.GetAllReviews)
 	}
 
 	r.Run("localhost:8888")
