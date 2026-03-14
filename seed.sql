@@ -51,7 +51,7 @@ create table users (
     id serial PRIMARY KEY,
     full_name varchar(80),
     email varchar(25) UNIQUE NOT NULL,
-    password varchar(80),
+    password text,
     address varchar(80),
     phone varchar(16),
     picture varchar(120),

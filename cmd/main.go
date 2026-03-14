@@ -23,6 +23,7 @@ func main() {
 
 	userHandler := container.UserHandler()
 	forgotPasswordHandler := container.ForgotPasswordHandler()
+	authHandler := container.AuthHandler()
 
 	users := r.Group("/users")
 	{
@@ -31,6 +32,12 @@ func main() {
 		users.POST("/forgot-password", forgotPasswordHandler.GenerateOTP)
 		users.POST("/forgot-password/verifikasi-otp", forgotPasswordHandler.VerifikasiOTP)
 		users.PATCH("/forgot-password/change", forgotPasswordHandler.ChangePassword)
+	}
+
+	auth := r.Group("/auth")
+	{
+		auth.POST("/login", authHandler.Login)
+		auth.POST("/register", authHandler.Register)
 	}
 
 	r.Run("localhost:8888")

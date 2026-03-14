@@ -1,11 +1,21 @@
 # register
-POST /register HTTP/1.1
+POST /auth/register HTTP/1.1
 Host: localhost:8888
 Content-Type: application/json
 
 {
-    "fullName": "Koda",
-    "email": "koda@mail.com",
+    "fullName": "Arif3",
+    "email": "arif4@mail.com",
+    "password": "1234"
+}
+
+### login
+POST /auth/login HTTP/1.1
+Host: localhost:8888
+Content-Type: application/json
+
+{
+    "email": "arif4@mail.com",
     "password": "1234"
 }
 
@@ -29,16 +39,6 @@ Content-Type: application/json
 ### delete user
 DELETE /users/11 HTTP/1.1
 Host: localhost:8888
-
-### login
-POST /login HTTP/1.1
-Host: localhost:8888
-Content-Type: application/json
-
-{
-    "email": "koda@mail.com",
-    "password": "1234"
-}
 
 ###
 PUT /profile HTTP/1.1
@@ -76,7 +76,7 @@ Host: localhost:8888
 Content-Type: application/json
 
 {
-    "email": "arif.rahman@gmail.com",
-    "newPassword": "Arif1234",
-    "confirmPassword": "Arif1234"
+    "email": "arif2@mail.com",
+    "newPassword": "1234",
+    "confirmPassword": "1234"
 }
