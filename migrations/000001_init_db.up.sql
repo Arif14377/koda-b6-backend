@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     user_id VARCHAR(36),
     messages VARCHAR,
     rating INT CHECK (rating BETWEEN 1 AND 5),
+    created_at TIMESTAMP DEFAULT now()
     CONSTRAINT users
         foreign key(user_id)
         references users(id)

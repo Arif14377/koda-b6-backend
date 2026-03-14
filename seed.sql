@@ -75,6 +75,7 @@ create table reviews (
     user_id int,
     messages varchar(600),
     rating int,
+    created_at TIMESTAMP DEFAULT now(),
     constraint users
         foreign key(user_id)
         references users(id)
@@ -292,18 +293,22 @@ insert into cart(user_id, product_id) values
     (10, 26),
     (10, 29);
 
+ALTER TABLE reviews ADD COLUMN updated_at TIMESTAMP DEFAULT now();
+
 -- fill reviews
 insert into reviews(user_id, messages, rating) values
-    (1, 'Kopinya enak dan aromanya kuat, pasti order lagi.', 5),
-    (2, 'Tempatnya nyaman tapi minumannya agak lama datangnya.', 4),
-    (3, 'Rasa matchanya kurang terasa, mungkin bisa ditingkatkan.', 3),
-    (4, 'Pelayanannya ramah dan cepat, sangat puas.', 5),
-    (5, 'Harga sedikit mahal tapi kualitas sesuai.', 4),
-    (6, 'Kopi terlalu pahit untuk selera saya.', 2),
-    (7, 'Makanannya enak tapi minuman kurang dingin.', 3),
-    (8, 'Pelayanan kurang responsif saat ramai.', 2),
-    (9, 'Suka banget sama caramel lattenya, recommended!', 5),
-    (10, 'Overall oke, tapi tempat parkir agak sempit.', 4);
+    ('550e8400-e29b-41d4-a716-446655440010', 'Kopinya enak dan aromanya kuat, pasti order lagi.', 5),
+    ('550e8400-e29b-41d4-a716-446655440009', 'Tempatnya nyaman tapi minumannya agak lama datangnya.', 4),
+    ('550e8400-e29b-41d4-a716-446655440008', 'Rasa matchanya kurang terasa, mungkin bisa ditingkatkan.', 3),
+    ('550e8400-e29b-41d4-a716-446655440007', 'Pelayanannya ramah dan cepat, sangat puas.', 5),
+    ('550e8400-e29b-41d4-a716-446655440006', 'Harga sedikit mahal tapi kualitas sesuai.', 4),
+    ('550e8400-e29b-41d4-a716-446655440005', 'Kopi terlalu pahit untuk selera saya.', 2),
+    ('550e8400-e29b-41d4-a716-446655440004', 'Makanannya enak tapi minuman kurang dingin.', 3),
+    ('550e8400-e29b-41d4-a716-446655440003', 'Pelayanan kurang responsif saat ramai.', 2),
+    ('550e8400-e29b-41d4-a716-446655440002', 'Suka banget sama caramel lattenya, recommended!', 5),
+    ('e374ee40-5345-4e30-a0d7-2c992878007a', 'Overall oke, tapi tempat parkir agak sempit.', 4);
+
+
 
 -- fill transactions
 insert into transactions (trx_code, delivery_method, full_name, email, address, sub_total, tax, total, status, payment_method) values

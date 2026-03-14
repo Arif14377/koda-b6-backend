@@ -80,3 +80,7 @@ Content-Type: application/json
     "newPassword": "1234",
     "confirmPassword": "1234"
 }
+
+### Get All Products
+GET /products HTTP/1.1
+Host: localhost:8888
