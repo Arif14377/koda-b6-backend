@@ -10,4 +10,6 @@ COPY . .
 
 RUN go build -o my-backend ./cmd/main.go
 
+RUN chmod +x my-backend
+
 ENTRYPOINT ["workspace/my-backend"]
