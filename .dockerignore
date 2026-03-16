@@ -1,0 +1,19 @@
+.git
+.gitignore
+.vscode
+.idea
+.env
+README.md
+
+base.sql
+seed.sql
+
+auth-endpoint.http
+product-endpoint
+
+docker-compose.yml
+
+my-backend
+
+# Exclude migrations if handled separately
+# migrations/
