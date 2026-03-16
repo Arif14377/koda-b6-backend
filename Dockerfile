@@ -1,4 +1,4 @@
-FROM golang:1.26-alpine
+FROM golang:1.26-alpine AS build
 
 WORKDIR /workspace
 
@@ -12,4 +12,11 @@ RUN go build -o my-backend ./cmd/main.go
 
 RUN chmod +x my-backend
 
-ENTRYPOINT ["workspace/my-backend"]
+
+FROM alpine:latest
+
+WORKDIR /app
+
+COPY --from=build /workspace/my-backend /app
+
+ENTRYPOINT ["app/my-backend"]
