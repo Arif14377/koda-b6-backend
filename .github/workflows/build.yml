@@ -13,7 +13,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/adityabastyas/koda-b6-backend-cicd
+          images: ghcr.io/arifrahman14377/koda-b6-backend-cicd
           tags: type=raw,value=latest
       - name: "[DOCKER] Login GHCR"
         uses: docker/login-action@v3
