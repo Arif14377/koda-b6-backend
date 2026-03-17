@@ -1,5 +1,5 @@
 name: Server CI/CD
-run-name: Build and run latest image on server
+run-name: Build and push latest image to ghcr
 on: [push]
 jobs:
   Build-and-Run:

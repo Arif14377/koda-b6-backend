@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/arif14377/koda-b6-backend/internal/di"
 	"github.com/arif14377/koda-b6-backend/internal/middleware/cors"
@@ -48,7 +50,7 @@ func main() {
 		public.GET("/reviews", reviewHandler.GetAllReviews)
 	}
 
-	r.Run("localhost:8888")
+	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 	// // AUTH
 	// // register
 	// r.POST("/register", handler.Register)

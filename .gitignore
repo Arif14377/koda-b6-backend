@@ -2,3 +2,4 @@
 base.sql
 .vscode
 .idea
+docker-compose*.yml
