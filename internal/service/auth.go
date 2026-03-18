@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
@@ -25,22 +24,26 @@ func NewAuthService(authRepo *repository.AuthRepository, userRepo *repository.Us
 
 func (a *AuthService) Register(data *models.UserRegister) error {
 	if !strings.Contains(data.Email, "@") {
-		return errors.New("Email tidak valid.")
+		err := errors.New("Email tidak valid.")
+		return err
 	}
 
 	if data.FullName == "" || data.Email == "" || data.Password == "" {
-		return errors.New("Data tidak boleh kosong.")
+		err := errors.New("Data tidak boleh kosong.")
+		return err
 	}
 
 	isExist := a.userRepo.GetUserByEmail(data.Email)
 	if isExist {
-		return errors.New("Email sudah terdaftar.")
+		err := errors.New("Email sudah terdaftar.")
+		return err
 	}
 
 	argon := argon2.DefaultConfig()
 	encoded, err := argon.HashEncoded([]byte(data.Password))
 	if err != nil {
-		return fmt.Errorf("Failed to hashing password: %w", err)
+		err2 := errors.New("Failed to hashing password")
+		return err2
 	}
 
 	data.Password = string(encoded)

@@ -27,14 +27,16 @@ func (a *AuthHandler) Register(ctx *gin.Context) {
 			"success": false,
 			"message": "Input tidak valid",
 		})
+		fmt.Printf("Input tidak valid: %v", err)
 		return
 	}
 
+	// lempar data ke service
 	err = a.authService.Register(&data)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": err.Error(),
+			"message": err,
 		})
 		return
 	}
@@ -51,8 +53,9 @@ func (a *AuthHandler) Login(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": fmt.Sprintf("Input tidak valid, %v", err),
+			"message": "Input tidak valid.",
 		})
+		fmt.Printf("Input tidak valid: %v", err)
 		return
 	}
 
@@ -60,8 +63,9 @@ func (a *AuthHandler) Login(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"success": false,
-			"message": fmt.Sprintf("Email atau password salah, %v", err),
+			"message": "Email atau password salah.",
 		})
+		fmt.Printf("Input tidak valid: %v", err)
 		return
 	}
 
