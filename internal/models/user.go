@@ -18,11 +18,11 @@ type Users struct {
 }
 
 type UserListRead struct {
-	Id       string `json:"id"`
-	FullName string `json:"fullName"`
-	Email    string `json:"email"`
-	Phone    string `json:"phone"`
-	Role     int    `json:"role"`
+	Id       string  `json:"id"`
+	FullName string  `json:"fullName"`
+	Email    string  `json:"email"`
+	Phone    *string `json:"phone,omitempty"`
+	Role     int     `json:"role"`
 }
 
 type UserEmail struct {

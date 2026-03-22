@@ -45,8 +45,8 @@ func (a *AuthRepository) Login(email, password string) (*models.UserLogin, error
 		return &models.UserLogin{}, r
 	}
 
-	fmt.Println("password user from DB: ", user.Password)
-	fmt.Println("password user from parameter: ", password)
+	// fmt.Println("password user from DB: ", user.Password)
+	// fmt.Println("password user from parameter: ", password)
 
 	pwdOk, err := argon2.VerifyEncoded([]byte(password), []byte(user.Password))
 	if !pwdOk {
