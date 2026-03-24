@@ -51,40 +51,4 @@ func main() {
 	}
 
 	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
-	// // AUTH
-	// // register
-	// r.POST("/register", handler.Register)
-	// // login
-	// r.POST("/login", handler.Login)
-	// // get all users
-	// r.GET("/users", handler.GetUsers)
-	// // check user details
-	// r.GET("/users/:id", handler.UserDetails)
-	// // delete user
-	// r.DELETE("/users/:id", handler.DeleteUser)
-	// // update data user
-	// r.PUT("/profile", handler.UpdateUser)
-
-	// // PRODUCT
-	// // get all products
-	// r.GET("/products", handler.GetProducts)
-	// // get product details
-	// r.GET("/products/:id", handler.ProductDetails)
-	// // add product
-	// r.POST("/products", handler.AddProduct)
-	// // delete product
-	// r.DELETE("/products/:id", handler.DeleteProduct)
-	// r.PUT("/products/:id", handler.UpdateProduct)
-
-	// if err := handler.InitDB(); err != nil {
-	// 	log.Fatalf("gagal connect db: %v", err)
-	// }
-
-	// // database := os.Getenv("DATABASE")
-	// port := os.Getenv("PORT")
-	// fmt.Println(port)
-
-	// if err := r.Run(fmt.Sprintf("localhost:%s", port)); err != nil {
-	// 	log.Fatalf("failed to run: %v", err)
-	// }
 }
