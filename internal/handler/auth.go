@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
@@ -23,27 +23,28 @@ func (a *AuthHandler) Register(ctx *gin.Context) {
 	var data models.UserRegister
 	err := ctx.ShouldBindJSON(&data)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Input tidak valid",
+		log.Printf("Input tidak valid: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Input tidak valid",
 		})
-		fmt.Printf("Input tidak valid: %v", err)
 		return
 	}
 
 	// lempar data ke service
 	err = a.authService.Register(&data)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": err,
+		log.Printf("Gagal register: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "Registrasi berhasil.",
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Registrasi berhasil.",
 	})
 }
 
@@ -51,28 +52,28 @@ func (a *AuthHandler) Login(ctx *gin.Context) {
 	var data models.UserLogin
 	err := ctx.ShouldBindJSON(&data)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Input tidak valid.",
+		log.Printf("Input tidak valid: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Input tidak valid.",
 		})
-		fmt.Printf("Input tidak valid: %v", err)
 		return
 	}
 
 	token, err := a.authService.Login(data.Email, data.Password)
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"success": false,
-			"message": "Email atau password salah.",
+		log.Printf("Gagal login: %v", err)
+		ctx.JSON(http.StatusUnauthorized, models.Response{
+			Success: false,
+			Message: "Email atau password salah.",
 		})
-		fmt.Printf("Input tidak valid: %v", err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "Login berhasil.",
-		"results": gin.H{
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Login berhasil.",
+		Results: gin.H{
 			"email": data.Email,
 			"token": token,
 		},

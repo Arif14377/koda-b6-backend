@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
@@ -19,10 +20,10 @@ func NewUserHandler(service *service.UserService) *UserHandler {
 }
 
 func (u *UserHandler) GetAllUser(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "List all users",
-		"results": u.userService.GetAllUser(),
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "List all users",
+		Results: u.userService.GetAllUser(),
 	})
 }
 
@@ -31,25 +32,27 @@ func (u *UserHandler) GetUserByEmail(ctx *gin.Context) {
 	var data models.UserEmail
 	err := ctx.ShouldBindJSON(&data)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Input tidak valid",
-		})
-	}
-
-	exists := u.userService.GetUserByEmail(data.Email)
-	if !exists {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"success": false,
-			"message": "User not found",
+		log.Printf("Input tidak valid: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Input tidak valid",
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "User found",
-		"results": gin.H{
+	exists := u.userService.GetUserByEmail(data.Email)
+	if !exists {
+		ctx.JSON(http.StatusNotFound, models.Response{
+			Success: false,
+			Message: "User not found",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "User found",
+		Results: gin.H{
 			"email": data.Email,
 		},
 	})

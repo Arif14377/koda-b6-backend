@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
@@ -24,9 +25,10 @@ func (fp *ForgotPasswordHandler) GenerateOTP(ctx *gin.Context) {
 	var data models.UserEmail
 	err := ctx.ShouldBindJSON(&data)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Input tidak valid",
+		log.Printf("Input tidak valid: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Input tidak valid",
 		})
 		return
 	}
@@ -34,18 +36,18 @@ func (fp *ForgotPasswordHandler) GenerateOTP(ctx *gin.Context) {
 	emailExist := fp.userService.GetUserByEmail(data.Email)
 
 	if !emailExist {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"success": false,
-			"message": "User not found",
+		ctx.JSON(http.StatusNotFound, models.Response{
+			Success: false,
+			Message: "User not found",
 		})
 		return
 	}
 
 	fp.fpService.GenerateOTP(data.Email)
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "OTP successfully generated and sent to your email.",
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "OTP successfully generated and sent to your email.",
 	})
 }
 
@@ -54,9 +56,10 @@ func (fp *ForgotPasswordHandler) VerifikasiOTP(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&data)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Data input is not valid",
+		log.Printf("Input tidak valid: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Data input is not valid",
 		})
 		return
 	}
@@ -64,16 +67,17 @@ func (fp *ForgotPasswordHandler) VerifikasiOTP(ctx *gin.Context) {
 	err = fp.fpService.VerifikasiOTP(data.Email, data.Code)
 	// fmt.Println(err)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Incorrect email or OTP",
+		log.Printf("Gagal verifikasi OTP: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Incorrect email or OTP",
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "OTP successfully verified.",
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "OTP successfully verified.",
 	})
 }
 
@@ -81,24 +85,26 @@ func (fp *ForgotPasswordHandler) ChangePassword(ctx *gin.Context) {
 	var data *models.ForgotPassword
 	err := ctx.ShouldBindJSON(&data)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Data input is not valid",
+		log.Printf("Input tidak valid: %v", err)
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Data input is not valid",
 		})
 		return
 	}
 
 	err = fp.fpService.ChangePassword(data)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": err,
+		log.Printf("Gagal ganti password: %v", err)
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Ada kesalahan pada server.",
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "Successfully change password",
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Successfully change password",
 	})
 }
