@@ -2,10 +2,13 @@ package service
 
 import (
 	"errors"
+	"os"
 	"strings"
+	"time"
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/arif14377/koda-b6-backend/internal/repository"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/matthewhartstonge/argon2"
 )
@@ -57,18 +60,37 @@ func (a *AuthService) Register(data *models.UserRegister) error {
 	return nil
 }
 
-func (a *AuthService) Login(email, password string) (*models.UserLogin, error) {
+func (a *AuthService) Login(email, password string) (string, error) {
 	if !strings.Contains(email, "@") {
 		err := errors.New("Email wrong.")
-		return &models.UserLogin{}, err
+		return "", err
 	}
 
 	if email == "" || password == "" {
 		err := errors.New("Email or Password is empty.")
-		return &models.UserLogin{}, err
+		return "", err
 	}
 
 	user, err := a.authRepo.Login(email, password)
+	if err != nil {
+		return "", err
+	}
 
-	return user, err
+	// Generate JWT Token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"email": user.Email,
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	secret := os.Getenv("JWT_SECRET")
+	if secret == "" {
+		secret = "coffee-shop-secret" // fallback
+	}
+
+	tokenString, err := token.SignedString([]byte(secret))
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
 }

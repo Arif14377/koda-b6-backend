@@ -6,6 +6,7 @@ type Products struct {
 	Description string `json:"description"`
 	Quantity    int    `json:"quantity"`
 	Price       int    `json:"price"`
+	Image       string `json:"image"`
 }
 
 type ProductVariant struct {

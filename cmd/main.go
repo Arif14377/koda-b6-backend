@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/arif14377/koda-b6-backend/internal/di"
+	"github.com/arif14377/koda-b6-backend/internal/middleware"
 	"github.com/arif14377/koda-b6-backend/internal/middleware/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -30,6 +31,7 @@ func main() {
 	reviewHandler := container.ReviewHandler()
 
 	users := r.Group("/users")
+	users.Use(middleware.AuthMiddleware())
 	{
 		users.GET("", userHandler.GetAllUser)
 		users.POST("/by-email", userHandler.GetUserByEmail)

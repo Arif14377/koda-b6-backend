@@ -18,7 +18,14 @@ func NewProductRepository(db *pgx.Conn) *ProductRepository {
 }
 
 func (p *ProductRepository) GetAllProducts() (*[]models.Products, error) {
-	rows, err := p.db.Query(context.Background(), "SELECT id, name, description, quantity, price FROM products")
+	query := `
+		SELECT 
+			p.id, p.name, p.description, p.quantity, p.price,
+			COALESCE(pi.path, '') as image
+		FROM products p
+		LEFT JOIN product_images pi ON p.id = pi.product_id
+	`
+	rows, err := p.db.Query(context.Background(), query)
 	// fmt.Println(rows)
 	// fmt.Println(err)
 	if err != nil {
