@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -34,5 +35,34 @@ func (p *ProductHandler) GetAllProducts(ctx *gin.Context) {
 		Success: true,
 		Message: "List all products",
 		Results: products,
+	})
+}
+
+func (p *ProductHandler) GetProductById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	var productId int
+	_, err := fmt.Sscanf(id, "%d", &productId)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "ID Produk tidak valid.",
+		})
+		return
+	}
+
+	product, err := p.productService.GetProductById(productId)
+	if err != nil {
+		log.Printf("Gagal mendapatkan detail produk: %v", err)
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Ada kesalahan pada server.",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Detail product",
+		Results: product,
 	})
 }

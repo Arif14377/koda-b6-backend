@@ -49,6 +49,7 @@ func main() {
 	public := r.Group("/")
 	{
 		public.GET("/products", productHandler.GetAllProducts)
+		public.GET("/products/:id", productHandler.GetProductById)
 		public.GET("/reviews", reviewHandler.GetAllReviews)
 	}
 

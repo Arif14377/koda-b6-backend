@@ -6,14 +6,15 @@ import (
 
 	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/matthewhartstonge/argon2"
 )
 
 type AuthRepository struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
-func NewAuthRepository(db *pgx.Conn) *AuthRepository {
+func NewAuthRepository(db *pgxpool.Pool) *AuthRepository {
 	return &AuthRepository{
 		db: db,
 	}

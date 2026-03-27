@@ -15,7 +15,10 @@ create table products (
     name varchar(30),
     description varchar(200),
     quantity int,
-    price int
+    price int,
+    rating int default 0,
+    old_price int,
+    is_flash_sale boolean default false
 );
 
 CREATE TABLE product_variant (
@@ -128,37 +131,37 @@ create table product_category (
 
 
 -- Fill products
-insert into products(name, description, quantity, price) values
-    ('Espresso', 'Kopi hitam pekat dengan crema tebal', 50, 18000),
-    ('Americano', 'Espresso dengan tambahan air panas', 45, 20000),
-    ('Cappuccino', 'Espresso dengan steamed milk dan foam lembut', 40, 25000),
-    ('Caffe Latte', 'Espresso dengan susu creamy', 42, 25000),
-    ('Caramel Latte', 'Latte dengan sirup karamel manis', 35, 28000),
-    ('Vanilla Latte', 'Latte dengan aroma vanilla lembut', 30, 28000),
-    ('Hazelnut Latte', 'Latte dengan rasa hazelnut gurih', 28, 28000),
-    ('Mocha', 'Perpaduan espresso, cokelat, dan susu', 32, 30000),
-    ('Affogato', 'Espresso dengan scoop es krim vanilla', 20, 32000),
-    ('Cold Brew', 'Kopi seduh dingin dengan rasa smooth', 25, 27000),
-    ('Matcha Latte', 'Teh hijau Jepang dengan susu creamy', 30, 28000),
-    ('Chocolate', 'Minuman cokelat hangat premium', 35, 26000),
-    ('Taro Latte', 'Minuman taro manis dan creamy', 25, 27000),
-    ('Red Velvet Latte', 'Minuman red velvet lembut', 20, 29000),
-    ('Thai Tea', 'Teh Thailand dengan susu kental manis', 30, 24000),
-    ('Lemon Tea', 'Teh segar dengan perasan lemon', 40, 20000),
-    ('Peach Tea', 'Teh dengan aroma dan rasa peach', 22, 23000),
-    ('Mineral Water', 'Air mineral botol dingin', 60, 10000),
-    ('Croissant Butter', 'Pastry renyah dengan aroma butter', 20, 22000),
-    ('Chocolate Croissant', 'Croissant isi cokelat lumer', 18, 25000),
-    ('Chicken Sandwich', 'Roti isi ayam dan sayur segar', 15, 30000),
-    ('Beef Burger', 'Burger daging sapi dengan saus spesial', 12, 35000),
-    ('French Fries', 'Kentang goreng crispy', 25, 20000),
-    ('Spaghetti Bolognese', 'Pasta dengan saus daging tomat', 14, 38000),
-    ('Chicken Wrap', 'Tortilla isi ayam dan sayuran', 16, 32000),
-    ('Cheese Cake Slice', 'Potongan cheesecake lembut', 10, 30000),
-    ('Extra Shot Espresso', 'Tambahan satu shot espresso', 100, 8000),
-    ('Syrup Caramel', 'Tambahan sirup karamel', 80, 5000),
-    ('Syrup Vanilla', 'Tambahan sirup vanilla', 80, 5000),
-    ('Whipped Cream', 'Tambahan whipped cream lembut', 70, 7000);
+insert into products(name, description, quantity, price, rating, old_price, is_flash_sale) values
+    ('Espresso', 'Kopi hitam pekat dengan crema tebal', 50, 18000, 5, 20000, false),
+    ('Americano', 'Espresso dengan tambahan air panas', 45, 20000, 4, 25000, false),
+    ('Cappuccino', 'Espresso dengan steamed milk dan foam lembut', 40, 25000, 5, 30000, true),
+    ('Caffe Latte', 'Espresso dengan susu creamy', 42, 25000, 4, 0, false),
+    ('Caramel Latte', 'Latte dengan sirup karamel manis', 35, 28000, 5, 35000, false),
+    ('Vanilla Latte', 'Latte dengan aroma vanilla lembut', 30, 28000, 4, 0, false),
+    ('Hazelnut Latte', 'Latte dengan rasa hazelnut gurih', 28, 28000, 4, 0, false),
+    ('Mocha', 'Perpaduan espresso, cokelat, dan susu', 32, 30000, 5, 35000, true),
+    ('Affogato', 'Espresso dengan scoop es krim vanilla', 20, 32000, 5, 0, false),
+    ('Cold Brew', 'Kopi seduh dingin dengan rasa smooth', 25, 27000, 4, 30000, false),
+    ('Matcha Latte', 'Teh hijau Jepang dengan susu creamy', 30, 28000, 5, 0, false),
+    ('Chocolate', 'Minuman cokelat hangat premium', 35, 26000, 4, 0, false),
+    ('Taro Latte', 'Minuman taro manis dan creamy', 25, 27000, 4, 0, false),
+    ('Red Velvet Latte', 'Minuman red velvet lembut', 20, 29000, 4, 0, false),
+    ('Thai Tea', 'Teh Thailand dengan susu kental manis', 30, 24000, 4, 0, false),
+    ('Lemon Tea', 'Teh segar dengan perasan lemon', 40, 20000, 4, 0, false),
+    ('Peach Tea', 'Teh dengan aroma dan rasa peach', 22, 23000, 4, 0, false),
+    ('Mineral Water', 'Air mineral botol dingin', 60, 10000, 5, 0, false),
+    ('Croissant Butter', 'Pastry renyah dengan aroma butter', 20, 22000, 5, 25000, false),
+    ('Chocolate Croissant', 'Croissant isi cokelat lumer', 18, 25000, 5, 30000, true),
+    ('Chicken Sandwich', 'Roti isi ayam dan sayur segar', 15, 30000, 4, 0, false),
+    ('Beef Burger', 'Burger daging sapi dengan saus spesial', 12, 35000, 5, 45000, true),
+    ('French Fries', 'Kentang goreng crispy', 25, 20000, 4, 0, false),
+    ('Spaghetti Bolognese', 'Pasta dengan saus daging tomat', 14, 38000, 4, 0, false),
+    ('Chicken Wrap', 'Tortilla isi ayam dan sayuran', 16, 32000, 4, 0, false),
+    ('Cheese Cake Slice', 'Potongan cheesecake lembut', 10, 30000, 5, 0, false),
+    ('Extra Shot Espresso', 'Tambahan satu shot espresso', 100, 8000, 5, 0, false),
+    ('Syrup Caramel', 'Tambahan sirup karamel', 80, 5000, 4, 0, false),
+    ('Syrup Vanilla', 'Tambahan sirup vanilla', 80, 5000, 4, 0, false),
+    ('Whipped Cream', 'Tambahan whipped cream lembut', 70, 7000, 4, 0, false);
 
 -- fill product_variant
 insert into product_variant(product_id, name, add_price) values
@@ -389,122 +392,123 @@ insert into product_category(product_id, category_id) values
 
 -- fill product_images
 insert into product_images(product_id, path) values
-(1, 'https://placehold.co/600x600'),
-(1, 'https://placehold.co/600x600'),
-(1, 'https://placehold.co/600x600'),
-
-(2, 'https://placehold.co/600x600'),
-(2, 'https://placehold.co/600x600'),
-(2, 'https://placehold.co/600x600'),
-
-(3, 'https://placehold.co/600x600'),
-(3, 'https://placehold.co/600x600'),
-(3, 'https://placehold.co/600x600'),
-
-(4, 'https://placehold.co/600x600'),
-(4, 'https://placehold.co/600x600'),
-(4, 'https://placehold.co/600x600'),
-
-(5, 'https://placehold.co/600x600'),
-(5, 'https://placehold.co/600x600'),
-(5, 'https://placehold.co/600x600'),
-
-(6, 'https://placehold.co/600x600'),
-(6, 'https://placehold.co/600x600'),
-(6, 'https://placehold.co/600x600'),
-
-(7, 'https://placehold.co/600x600'),
-(7, 'https://placehold.co/600x600'),
-(7, 'https://placehold.co/600x600'),
-
-(8, 'https://placehold.co/600x600'),
-(8, 'https://placehold.co/600x600'),
-(8, 'https://placehold.co/600x600'),
-
-(9, 'https://placehold.co/600x600'),
-(9, 'https://placehold.co/600x600'),
-(9, 'https://placehold.co/600x600'),
-
-(10, 'https://placehold.co/600x600'),
-(10, 'https://placehold.co/600x600'),
-(10, 'https://placehold.co/600x600'),
-
-(11, 'https://placehold.co/600x600'),
-(11, 'https://placehold.co/600x600'),
-(11, 'https://placehold.co/600x600'),
-
-(12, 'https://placehold.co/600x600'),
-(12, 'https://placehold.co/600x600'),
-(12, 'https://placehold.co/600x600'),
-
-(13, 'https://placehold.co/600x600'),
-(13, 'https://placehold.co/600x600'),
-(13, 'https://placehold.co/600x600'),
-
-(14, 'https://placehold.co/600x600'),
-(14, 'https://placehold.co/600x600'),
-(14, 'https://placehold.co/600x600'),
-
-(15, 'https://placehold.co/600x600'),
-(15, 'https://placehold.co/600x600'),
-(15, 'https://placehold.co/600x600'),
-
-(16, 'https://placehold.co/600x600'),
-(16, 'https://placehold.co/600x600'),
-(16, 'https://placehold.co/600x600'),
-
-(17, 'https://placehold.co/600x600'),
-(17, 'https://placehold.co/600x600'),
-(17, 'https://placehold.co/600x600'),
-
-(18, 'https://placehold.co/600x600'),
-(18, 'https://placehold.co/600x600'),
-(18, 'https://placehold.co/600x600'),
-
-(19, 'https://placehold.co/600x600'),
-(19, 'https://placehold.co/600x600'),
-(19, 'https://placehold.co/600x600'),
-
-(20, 'https://placehold.co/600x600'),
-(20, 'https://placehold.co/600x600'),
-(20, 'https://placehold.co/600x600'),
-
-(21, 'https://placehold.co/600x600'),
-(21, 'https://placehold.co/600x600'),
-(21, 'https://placehold.co/600x600'),
-
-(22, 'https://placehold.co/600x600'),
-(22, 'https://placehold.co/600x600'),
-(22, 'https://placehold.co/600x600'),
-
-(23, 'https://placehold.co/600x600'),
-(23, 'https://placehold.co/600x600'),
-(23, 'https://placehold.co/600x600'),
-
-(24, 'https://placehold.co/600x600'),
-(24, 'https://placehold.co/600x600'),
-(24, 'https://placehold.co/600x600'),
-
-(25, 'https://placehold.co/600x600'),
-(25, 'https://placehold.co/600x600'),
-(25, 'https://placehold.co/600x600'),
-
-(26, 'https://placehold.co/600x600'),
-(26, 'https://placehold.co/600x600'),
-(26, 'https://placehold.co/600x600'),
-
-(27, 'https://placehold.co/600x600'),
-(27, 'https://placehold.co/600x600'),
-(27, 'https://placehold.co/600x600'),
-
-(28, 'https://placehold.co/600x600'),
-(28, 'https://placehold.co/600x600'),
-(28, 'https://placehold.co/600x600'),
-
-(29, 'https://placehold.co/600x600'),
-(29, 'https://placehold.co/600x600'),
-(29, 'https://placehold.co/600x600'),
-
-(30, 'https://placehold.co/600x600'),
-(30, 'https://placehold.co/600x600'),
-(30, 'https://placehold.co/600x600');
+-- 1. Espresso
+(1, 'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=600&h=600&auto=format&fit=crop'),
+(1, 'https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?q=80&w=600&h=600&auto=format&fit=crop'),
+(1, 'https://images.unsplash.com/photo-1565538183181-79282740a618?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 2. Americano
+(2, 'https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=600&h=600&auto=format&fit=crop'),
+(2, 'https://images.unsplash.com/photo-1557006021-b85faa2bc5e2?q=80&w=600&h=600&auto=format&fit=crop'),
+(2, 'https://images.unsplash.com/photo-1580915411954-282cb1b0d780?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 3. Cappuccino
+(3, 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=600&h=600&auto=format&fit=crop'),
+(3, 'https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=600&h=600&auto=format&fit=crop'),
+(3, 'https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 4. Caffe Latte
+(4, 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=600&h=600&auto=format&fit=crop'),
+(4, 'https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=600&h=600&auto=format&fit=crop'),
+(4, 'https://images.unsplash.com/photo-1459755486867-b55449bb39ff?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 5. Caramel Latte
+(5, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=600&h=600&auto=format&fit=crop'),
+(5, 'https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=600&h=600&auto=format&fit=crop'),
+(5, 'https://images.unsplash.com/photo-1599398054066-846f28917f38?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 6. Vanilla Latte
+(6, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&h=600&auto=format&fit=crop'),
+(6, 'https://images.unsplash.com/photo-1544145945-f904253d0c71?q=80&w=600&h=600&auto=format&fit=crop'),
+(6, 'https://images.unsplash.com/photo-1570968865863-dc4ac048be6b?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 7. Hazelnut Latte
+(7, 'https://images.unsplash.com/photo-1494314671902-399b18174975?q=80&w=600&h=600&auto=format&fit=crop'),
+(7, 'https://images.unsplash.com/photo-1512568400610-62da28bc8a13?q=80&w=600&h=600&auto=format&fit=crop'),
+(7, 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 8. Mocha
+(8, 'https://images.unsplash.com/photo-1559496417-e7f25cb247f3?q=80&w=600&h=600&auto=format&fit=crop'),
+(8, 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?q=80&w=600&h=600&auto=format&fit=crop'),
+(8, 'https://images.unsplash.com/photo-1553909489-cd47e0907d3f?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 9. Affogato
+(9, 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=600&h=600&auto=format&fit=crop'),
+(9, 'https://images.unsplash.com/photo-1594631252845-29fc4586c552?q=80&w=600&h=600&auto=format&fit=crop'),
+(9, 'https://images.unsplash.com/photo-1447078806655-40579c2520d6?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 10. Cold Brew
+(10, 'https://images.unsplash.com/photo-1512568400610-62da28bc8a13?q=80&w=600&h=600&auto=format&fit=crop'),
+(10, 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=600&h=600&auto=format&fit=crop'),
+(10, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 11. Matcha Latte
+(11, 'https://images.unsplash.com/photo-1515824918246-a8a556f3c27f?q=80&w=600&h=600&auto=format&fit=crop'),
+(11, 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=600&h=600&auto=format&fit=crop'),
+(11, 'https://images.unsplash.com/photo-1596791011531-10c0e5a60e6e?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 12. Chocolate
+(12, 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=600&h=600&auto=format&fit=crop'),
+(12, 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=600&h=600&auto=format&fit=crop'),
+(12, 'https://images.unsplash.com/photo-1511381939415-e44015466834?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 13. Taro Latte
+(13, 'https://images.unsplash.com/photo-1534706936160-d5ee67737249?q=80&w=600&h=600&auto=format&fit=crop'),
+(13, 'https://images.unsplash.com/photo-1627834377411-8da5f4f09de8?q=80&w=600&h=600&auto=format&fit=crop'),
+(13, 'https://images.unsplash.com/photo-1579888945649-2f1585aaabbb?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 14. Red Velvet Latte
+(14, 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?q=80&w=600&h=600&auto=format&fit=crop'),
+(14, 'https://images.unsplash.com/photo-1579306194872-64d3b7bac4c2?q=80&w=600&h=600&auto=format&fit=crop'),
+(14, 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 15. Thai Tea
+(15, 'https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?q=80&w=600&h=600&auto=format&fit=crop'),
+(15, 'https://images.unsplash.com/photo-1594631252845-29fc4586c552?q=80&w=600&h=600&auto=format&fit=crop'),
+(15, 'https://images.unsplash.com/photo-1571328003758-4a3921661709?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 16. Lemon Tea
+(16, 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=600&h=600&auto=format&fit=crop'),
+(16, 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=600&h=600&auto=format&fit=crop'),
+(16, 'https://images.unsplash.com/photo-1543508282-5c1f427f023f?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 17. Peach Tea
+(17, 'https://images.unsplash.com/photo-1525193612562-0ec53b0e5d7c?q=80&w=600&h=600&auto=format&fit=crop'),
+(17, 'https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?q=80&w=600&h=600&auto=format&fit=crop'),
+(17, 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 18. Mineral Water
+(18, 'https://images.unsplash.com/photo-1523362628742-0c2673ee5202?q=80&w=600&h=600&auto=format&fit=crop'),
+(18, 'https://images.unsplash.com/photo-1550507992-eb63ffee0847?q=80&w=600&h=600&auto=format&fit=crop'),
+(18, 'https://images.unsplash.com/photo-1559839914-17aae19cea9e?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 19. Croissant Butter
+(19, 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=600&h=600&auto=format&fit=crop'),
+(19, 'https://images.unsplash.com/photo-1549437254-4796332a6859?q=80&w=600&h=600&auto=format&fit=crop'),
+(19, 'https://images.unsplash.com/photo-1530610476181-d83430b64dcd?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 20. Chocolate Croissant
+(20, 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=600&h=600&auto=format&fit=crop'),
+(20, 'https://images.unsplash.com/photo-1530610476181-d83430b64dcd?q=80&w=600&h=600&auto=format&fit=crop'),
+(20, 'https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 21. Chicken Sandwich
+(21, 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=600&h=600&auto=format&fit=crop'),
+(21, 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=600&h=600&auto=format&fit=crop'),
+(21, 'https://images.unsplash.com/photo-1550507992-eb63ffee0847?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 22. Beef Burger
+(22, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600&h=600&auto=format&fit=crop'),
+(22, 'https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=600&h=600&auto=format&fit=crop'),
+(22, 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 23. French Fries
+(23, 'https://images.unsplash.com/photo-1573088693243-9874a625e3bb?q=80&w=600&h=600&auto=format&fit=crop'),
+(23, 'https://images.unsplash.com/photo-1518013431117-eb1465fd5752?q=80&w=600&h=600&auto=format&fit=crop'),
+(23, 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 24. Spaghetti Bolognese
+(24, 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=600&h=600&auto=format&fit=crop'),
+(24, 'https://images.unsplash.com/photo-1572441713132-c542fc4fe282?q=80&w=600&h=600&auto=format&fit=crop'),
+(24, 'https://images.unsplash.com/photo-1622973536968-3ead9e780960?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 25. Chicken Wrap
+(25, 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&h=600&auto=format&fit=crop'),
+(25, 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?q=80&w=600&h=600&auto=format&fit=crop'),
+(25, 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 26. Cheese Cake Slice
+(26, 'https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=600&h=600&auto=format&fit=crop'),
+(26, 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=600&h=600&auto=format&fit=crop'),
+(26, 'https://images.unsplash.com/photo-1508737804141-4c3b688e2546?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 27. Extra Shot Espresso
+(27, 'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=600&h=600&auto=format&fit=crop'),
+(27, 'https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?q=80&w=600&h=600&auto=format&fit=crop'),
+(27, 'https://images.unsplash.com/photo-1565538183181-79282740a618?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 28. Syrup Caramel
+(28, 'https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=600&h=600&auto=format&fit=crop'),
+(28, 'https://images.unsplash.com/photo-1582845241727-46487e411b2b?q=80&w=600&h=600&auto=format&fit=crop'),
+(28, 'https://images.unsplash.com/photo-1555529731-118a5bb67af7?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 29. Syrup Vanilla
+(29, 'https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=600&h=600&auto=format&fit=crop'),
+(29, 'https://images.unsplash.com/photo-1506368249639-73a05d6f6488?q=80&w=600&h=600&auto=format&fit=crop'),
+(29, 'https://images.unsplash.com/photo-1621236304198-6515855885ba?q=80&w=600&h=600&auto=format&fit=crop'),
+-- 30. Whipped Cream
+(30, 'https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=600&h=600&auto=format&fit=crop'),
+(30, 'https://images.unsplash.com/photo-1553909489-cd47e0907d3f?q=80&w=600&h=600&auto=format&fit=crop'),
+(30, 'https://images.unsplash.com/photo-1610450954843-05f42df22204?q=80&w=600&h=600&auto=format&fit=crop');

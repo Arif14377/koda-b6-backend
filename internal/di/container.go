@@ -8,11 +8,11 @@ import (
 	"github.com/arif14377/koda-b6-backend/internal/handler"
 	"github.com/arif14377/koda-b6-backend/internal/repository"
 	"github.com/arif14377/koda-b6-backend/internal/service"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Container struct {
-	db          *pgx.Conn
+	db          *pgxpool.Pool
 	userRepo    *repository.UserRepository
 	userService *service.UserService
 	userHandler *handler.UserHandler
@@ -36,14 +36,20 @@ type Container struct {
 
 func NewCointainer() *Container {
 	// fmt.Println(os.Getenv("DATABASE_URL"))
-	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+	config, err := pgxpool.ParseConfig(os.Getenv("DATABASE_URL"))
 	if err != nil {
-		fmt.Printf("Failed to connect database: %v", err)
+		fmt.Printf("Failed to parse database URL: %v", err)
+		os.Exit(1)
+	}
+
+	pool, err := pgxpool.NewWithConfig(context.Background(), config)
+	if err != nil {
+		fmt.Printf("Failed to connect database pool: %v", err)
 		os.Exit(1)
 	}
 
 	container := Container{
-		db: conn,
+		db: pool,
 	}
 
 	container.initDependencies()
