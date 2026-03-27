@@ -97,9 +97,27 @@ func (p *ProductRepository) GetProductById(id int) (*models.Products, error) {
 		rowsImages.Close()
 	}
 
-	// Fetch Variants (Assuming variants are shared or linked, but here we just show what's needed for the UI)
-	// If variants are not in DB yet, we can mock them or leave empty.
-	// Based on seed.sql (if exists), let's check what variants/sizes are available.
+	// Fetch Variants
+	queryVariants := `SELECT id, name, add_price FROM product_variant WHERE product_id = $1`
+	rowsVariants, err := p.db.Query(context.Background(), queryVariants, id)
+	if err == nil {
+		variants, err := pgx.CollectRows(rowsVariants, pgx.RowToStructByNameLax[models.ProductVariant])
+		if err == nil {
+			product.Variants = variants
+		}
+		rowsVariants.Close()
+	}
+
+	// Fetch Sizes
+	querySizes := `SELECT id, name, add_price FROM product_size WHERE product_id = $1`
+	rowsSizes, err := p.db.Query(context.Background(), querySizes, id)
+	if err == nil {
+		sizes, err := pgx.CollectRows(rowsSizes, pgx.RowToStructByNameLax[models.ProductSize])
+		if err == nil {
+			product.Sizes = sizes
+		}
+		rowsSizes.Close()
+	}
 
 	return &product, nil
 }

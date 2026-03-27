@@ -20,7 +20,7 @@ func NewReviewRepository(db *pgxpool.Pool) *ReviewRepository {
 
 func (r *ReviewRepository) GetAllReviews() (*[]models.Reviews, error) {
 	rows, err := r.db.Query(context.Background(), `
-		SELECT users.full_name, reviews.messages, reviews.rating
+		SELECT users.full_name, reviews.messages, reviews.rating, users.picture
 		FROM reviews
 		INNER JOIN users ON reviews.user_id = users.id
 	`)

@@ -252,16 +252,16 @@ INSERT INTO roles(name) VALUES
 
 -- fill users
 INSERT INTO users(id, full_name, email, password, address, phone, picture, role_id) VALUES
-('550e8400-e29b-41d4-a716-446655440001', 'Arif Rahman', 'arif.rahman@gmail.com', '1234', 'Jl. Kapuk No. 3 Tangsel', '081234560001', 'https://placehold.co/200x200', 1),
-('550e8400-e29b-41d4-a716-446655440002', 'Dewi Lestari', 'dewi.lestari@gmail.com', '1234', 'Jl. Kenanga No. 8 Bandung', '081234560002', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440003', 'Rizky Saputra', 'rizky.saputra@gmail.com', '1234', 'Jl. Mawar No. 21 Surabaya', '081234560003', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440004', 'Sinta Maharani', 'sinta.maharani@gmail.com', '1234', 'Jl. Anggrek No. 5 Yogyakarta', '081234560004', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440005', 'Fajar Nugroho', 'fajar.nugroho@gmail.com', '1234', 'Jl. Flamboyan No. 17 Semarang', '081234560005', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440006', 'Nadia Putri', 'nadia.putri@gmail.com', '1234', 'Jl. Dahlia No. 9 Medan', '081234560006', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440007', 'Bima Kurniawan', 'bima.kurniawan@gmail.com', '1234', 'Jl. Cempaka No. 14 Bekasi', '081234560007', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440008', 'Laras Wulandari', 'laras.wulandari@gmail.com', '1234', 'Jl. Teratai No. 3 Depok', '081234560008', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440009', 'Andika Ramadhan', 'andika.ramadhan@gmail.com', '1234', 'Jl. Bougenville No. 11 Tangerang', '081234560009', 'https://placehold.co/200x200', 2),
-('550e8400-e29b-41d4-a716-446655440010', 'Maya Oktaviani', 'maya.oktaviani@gmail.com', '1234', 'Jl. Sakura No. 6 Bogor', '081234560010', 'https://placehold.co/200x200', 2);
+('550e8400-e29b-41d4-a716-446655440001', 'Arif Rahman', 'arif.rahman@gmail.com', '1234', 'Jl. Kapuk No. 3 Tangsel', '081234560001', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&auto=format&fit=crop', 1),
+('550e8400-e29b-41d4-a716-446655440002', 'Dewi Lestari', 'dewi.lestari@gmail.com', '1234', 'Jl. Kenanga No. 8 Bandung', '081234560002', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440003', 'Rizky Saputra', 'rizky.saputra@gmail.com', '1234', 'Jl. Mawar No. 21 Surabaya', '081234560003', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440004', 'Sinta Maharani', 'sinta.maharani@gmail.com', '1234', 'Jl. Anggrek No. 5 Yogyakarta', '081234560004', 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440005', 'Fajar Nugroho', 'fajar.nugroho@gmail.com', '1234', 'Jl. Flamboyan No. 17 Semarang', '081234560005', 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440006', 'Nadia Putri', 'nadia.putri@gmail.com', '1234', 'Jl. Dahlia No. 9 Medan', '081234560006', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440007', 'Bima Kurniawan', 'bima.kurniawan@gmail.com', '1234', 'Jl. Cempaka No. 14 Bekasi', '081234560007', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440008', 'Laras Wulandari', 'laras.wulandari@gmail.com', '1234', 'Jl. Teratai No. 3 Depok', '081234560008', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440009', 'Andika Ramadhan', 'andika.ramadhan@gmail.com', '1234', 'Jl. Bougenville No. 11 Tangerang', '081234560009', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=200&h=200&auto=format&fit=crop', 2),
+('550e8400-e29b-41d4-a716-446655440010', 'Maya Oktaviani', 'maya.oktaviani@gmail.com', '1234', 'Jl. Sakura No. 6 Bogor', '081234560010', 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=200&h=200&auto=format&fit=crop', 2);
 
 -- fill cart;
 insert into cart(user_id, product_id) values
