@@ -51,7 +51,7 @@ create table product_images (
 );
 
 create table users (
-    id serial PRIMARY KEY,
+    id varchar(36) PRIMARY KEY,
     full_name varchar(80),
     email varchar(25) UNIQUE NOT NULL,
     password text,
@@ -63,14 +63,24 @@ create table users (
 
 create table cart (
     id serial PRIMARY KEY,
-    user_id int,
-    product_id int,
+    user_id varchar(36) not null,
+    product_id int not null,
+    quantity int not null default 1,
+    size_id int,
+    variant_id int,
+    created_at TIMESTAMP DEFAULT now(),
     constraint fk_user
         foreign key(user_id)
         references users(id),
     constraint fk_products
         foreign key(product_id)
-        references products(id)
+        references products(id),
+    constraint fk_size
+        foreign key(size_id)
+        references product_size(id),
+    constraint fk_variant
+        foreign key(variant_id)
+        references product_variant(id)
 );
 
 create table reviews (

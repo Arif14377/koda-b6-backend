@@ -60,24 +60,25 @@ func (a *AuthService) Register(data *models.UserRegister) error {
 	return nil
 }
 
-func (a *AuthService) Login(email, password string) (string, error) {
+func (a *AuthService) Login(email, password string) (*models.UserLogin, string, error) {
 	if !strings.Contains(email, "@") {
 		err := errors.New("Email wrong.")
-		return "", err
+		return nil, "", err
 	}
 
 	if email == "" || password == "" {
 		err := errors.New("Email or Password is empty.")
-		return "", err
+		return nil, "", err
 	}
 
 	user, err := a.authRepo.Login(email, password)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
 
 	// Generate JWT Token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":    user.Id,
 		"email": user.Email,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 	})
@@ -89,8 +90,8 @@ func (a *AuthService) Login(email, password string) (string, error) {
 
 	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
 
-	return tokenString, nil
+	return user, tokenString, nil
 }

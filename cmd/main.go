@@ -29,6 +29,7 @@ func main() {
 	authHandler := container.AuthHandler()
 	productHandler := container.ProductHandler()
 	reviewHandler := container.ReviewHandler()
+	cartHandler := container.CartHandler()
 
 	users := r.Group("/users")
 	users.Use(middleware.AuthMiddleware())
@@ -51,6 +52,16 @@ func main() {
 		public.GET("/products", productHandler.GetAllProducts)
 		public.GET("/products/:id", productHandler.GetProductById)
 		public.GET("/reviews", reviewHandler.GetAllReviews)
+	}
+
+	cart := r.Group("/cart")
+	cart.Use(middleware.AuthMiddleware())
+	{
+		cart.GET("", cartHandler.GetCart)
+		cart.POST("", cartHandler.AddToCart)
+		cart.PATCH("/:id", cartHandler.UpdateQuantity)
+		cart.DELETE("/:id", cartHandler.RemoveFromCart)
+		cart.DELETE("", cartHandler.ClearCart)
 	}
 
 	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))

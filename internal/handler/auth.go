@@ -60,7 +60,7 @@ func (a *AuthHandler) Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := a.authService.Login(data.Email, data.Password)
+	user, token, err := a.authService.Login(data.Email, data.Password)
 	if err != nil {
 		log.Printf("Gagal login: %v", err)
 		ctx.JSON(http.StatusUnauthorized, models.Response{
@@ -74,7 +74,8 @@ func (a *AuthHandler) Login(ctx *gin.Context) {
 		Success: true,
 		Message: "Login berhasil.",
 		Results: gin.H{
-			"email": data.Email,
+			"id":    user.Id,
+			"email": user.Email,
 			"token": token,
 		},
 	})

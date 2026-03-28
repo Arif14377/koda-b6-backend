@@ -48,7 +48,14 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Simpan email ke context agar bisa digunakan oleh handler selanjutnya
+		// Simpan ID dan email ke context agar bisa digunakan oleh handler selanjutnya
+		// Pastikan ID dikonversi ke string agar c.GetString("userId") berfungsi
+		userId := ""
+		if val, exists := claims["id"]; exists {
+			userId = val.(string)
+		}
+
+		c.Set("userId", userId)
 		c.Set("userEmail", claims["email"])
 		c.Next()
 	}
