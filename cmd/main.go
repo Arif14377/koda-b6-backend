@@ -73,6 +73,8 @@ func main() {
 		history.POST("", transactionHandler.Checkout)
 	}
 
+	r.GET("/delivery-methods", transactionHandler.GetDeliveryMethods)
+
 	err = r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 	if err != nil {
 		log.Printf("%v", err)

@@ -22,6 +22,10 @@ func (s *TransactionService) GetHistory(userId string) ([]models.Transaction, er
 	return s.repo.GetHistoryByUserId(userId)
 }
 
+func (s *TransactionService) GetDeliveryMethods() ([]models.DeliveryMethod, error) {
+	return s.repo.GetDeliveryMethods()
+}
+
 func (s *TransactionService) GetDetail(id int64, userId string) (*models.Transaction, error) {
 	return s.repo.GetTransactionById(id, userId)
 }

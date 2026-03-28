@@ -45,6 +45,24 @@ func (h *TransactionHandler) GetHistory(ctx *gin.Context) {
 	})
 }
 
+func (h *TransactionHandler) GetDeliveryMethods(ctx *gin.Context) {
+	methods, err := h.service.GetDeliveryMethods()
+	if err != nil {
+		log.Printf("Gagal mendapatkan daftar metode pengiriman: %v", err)
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Ada kesalahan pada server.",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Berhasil mendapatkan daftar metode pengiriman.",
+		Results: methods,
+	})
+}
+
 func (h *TransactionHandler) GetDetail(ctx *gin.Context) {
 	userId := ctx.GetString("userId")
 	if userId == "" {

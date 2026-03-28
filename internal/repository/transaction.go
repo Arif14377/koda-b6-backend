@@ -95,3 +95,19 @@ func (r *TransactionRepository) CreateTransactionProduct(ctx context.Context, tx
 func (r *TransactionRepository) Begin(ctx context.Context) (pgx.Tx, error) {
 	return r.db.Begin(ctx)
 }
+
+func (r *TransactionRepository) GetDeliveryMethods() ([]models.DeliveryMethod, error) {
+	query := `SELECT id, name, price FROM delivery_methods ORDER BY id ASC`
+	rows, err := r.db.Query(context.Background(), query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	methods, err := pgx.CollectRows(rows, pgx.RowToStructByName[models.DeliveryMethod])
+	if err != nil {
+		return nil, err
+	}
+
+	return methods, nil
+}

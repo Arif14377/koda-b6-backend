@@ -32,3 +32,9 @@ type TransactionItem struct {
 	SizeName      string `json:"size_name" db:"size_name"`
 	VariantName   string `json:"variant_name" db:"variant_name"`
 }
+
+type DeliveryMethod struct {
+	Id    int    `json:"id" db:"id"`
+	Name  string `json:"name" db:"name"`
+	Price int    `json:"price" db:"price"`
+}

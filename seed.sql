@@ -1,5 +1,6 @@
 -- DROP TABLES IN REVERSE ORDER TO HANDLE CONSTRAINTS
 DROP TABLE IF EXISTS product_category CASCADE;
+DROP TABLE IF EXISTS delivery_methods CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS transaction_product CASCADE;
 DROP TABLE IF EXISTS transactions CASCADE;
@@ -120,6 +121,12 @@ CREATE TABLE transaction_product (
     CONSTRAINT fk_variant FOREIGN KEY(variant_id) REFERENCES product_variant(id)
 );
 
+CREATE TABLE delivery_methods (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    price BIGINT DEFAULT 0
+);
+
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(80)
@@ -206,7 +213,13 @@ INSERT INTO users(id, full_name, email, password, address, phone, picture, role_
     ('550e8400-e29b-41d4-a716-446655440009', 'Andika Ramadhan', 'andika.ramadhan@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$lJpFSh+Xs4r1BKw/AqJgMw$VVoW/s4D5IOki95/z+XmoRFSxnG/PtTAYuz4aPFwXXs', 'Jl. Bougenville No. 11 Tangerang', '081234560009', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=200&h=200&auto=format&fit=crop', 2),
     ('550e8400-e29b-41d4-a716-446655440010', 'Maya Oktaviani', 'maya.oktaviani@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$lJpFSh+Xs4r1BKw/AqJgMw$VVoW/s4D5IOki95/z+XmoRFSxnG/PtTAYuz4aPFwXXs', 'Jl. Sakura No. 6 Bogor', '081234560010', 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=200&h=200&auto=format&fit=crop', 2);
 
--- 6. Categories
+-- 6. Delivery Methods
+INSERT INTO delivery_methods (name, price) VALUES 
+('Dine in', 0),
+('Door Delivery', 10000),
+('Pick up', 0);
+
+-- 7. Categories
 INSERT INTO categories(name) VALUES ('Favourite Product'), ('Coffee'), ('Non-Coffee'), ('Foods'), ('Add-On');
 
 -- 7. Product Category mapping
