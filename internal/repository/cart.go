@@ -25,6 +25,7 @@ func (r *CartRepository) GetCartByUserId(ctx context.Context, userId string) ([]
 			(p.price + COALESCE(ps.add_price, 0) + COALESCE(pv.add_price, 0)) as price,
 			COALESCE((SELECT path FROM product_images WHERE product_id = p.id LIMIT 1), '') as image,
 			ps.name as size, pv.name as variant,
+			c.size_id, c.variant_id,
 			(c.quantity * (p.price + COALESCE(ps.add_price, 0) + COALESCE(pv.add_price, 0))) as total
 		FROM cart c
 		JOIN products p ON c.product_id = p.id
@@ -49,8 +50,8 @@ func (r *CartRepository) AddToCart(ctx context.Context, cart models.Cart) error 
 	checkQuery := `
 		SELECT id, quantity FROM cart 
 		WHERE user_id = $1 AND product_id = $2 
-		AND (size_id = $3 OR (size_id IS NULL AND $3 IS NULL))
-		AND (variant_id = $4 OR (variant_id IS NULL AND $4 IS NULL))
+		AND (size_id IS NOT DISTINCT FROM $3)
+		AND (variant_id IS NOT DISTINCT FROM $4)
 	`
 	err := r.db.QueryRow(ctx, checkQuery, cart.UserId, cart.ProductId, cart.SizeId, cart.VariantId).Scan(&existingId, &existingQty)
 

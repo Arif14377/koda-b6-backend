@@ -33,7 +33,7 @@ func (a *AuthRepository) Register(userID string, user *models.UserRegister) erro
 }
 
 func (a *AuthRepository) Login(email, password string) (*models.UserLogin, error) {
-	rows, err := a.db.Query(context.Background(), "SELECT id, email, password FROM users WHERE email = $1", email)
+	rows, err := a.db.Query(context.Background(), "SELECT id, email, password, full_name FROM users WHERE email = $1", email)
 	if err != nil {
 		r := fmt.Errorf("Failed to get rows data: %w\n", err)
 		return &models.UserLogin{}, r

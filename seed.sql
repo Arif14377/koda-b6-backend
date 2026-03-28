@@ -96,6 +96,7 @@ create table reviews (
 
 create table transactions (
     id bigserial PRIMARY KEY,
+    user_id varchar(36),
     trx_code varchar(25) UNIQUE,
     delivery_method varchar(60),
     full_name varchar(80),
@@ -106,7 +107,10 @@ create table transactions (
     total int,
     date TIMESTAMP DEFAULT now(),
     status varchar(15),
-    payment_method varchar(20)
+    payment_method varchar(20),
+    constraint fk_user
+        foreign key(user_id)
+        references users(id)
 );
 
 create table transaction_product (
@@ -114,12 +118,21 @@ create table transaction_product (
     product_id int,
     transaction_id int,
     quantity int,
+    size_id int,
+    variant_id int,
+    price int,
     constraint fk_product
         foreign key(product_id)
         references products(id),
     constraint fk_transaction
         foreign key(transaction_id)
-        references transactions(id)
+        references transactions(id),
+    constraint fk_size
+        foreign key(size_id)
+        references product_size(id),
+    constraint fk_variant
+        foreign key(variant_id)
+        references product_variant(id)
 );
 
 create table categories (

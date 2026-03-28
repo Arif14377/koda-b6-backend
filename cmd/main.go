@@ -30,6 +30,7 @@ func main() {
 	productHandler := container.ProductHandler()
 	reviewHandler := container.ReviewHandler()
 	cartHandler := container.CartHandler()
+	transactionHandler := container.TransactionHandler()
 
 	users := r.Group("/users")
 	users.Use(middleware.AuthMiddleware())
@@ -64,5 +65,17 @@ func main() {
 		cart.DELETE("", cartHandler.ClearCart)
 	}
 
-	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
+	history := r.Group("/history")
+	history.Use(middleware.AuthMiddleware())
+	{
+		history.GET("", transactionHandler.GetHistory)
+		history.GET("/:id", transactionHandler.GetDetail)
+		history.POST("", transactionHandler.Checkout)
+	}
+
+	err = r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
+	if err != nil {
+		log.Printf("%v", err)
+		return
+	}
 }

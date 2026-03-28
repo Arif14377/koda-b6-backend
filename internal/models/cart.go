@@ -21,5 +21,7 @@ type CartItemResponse struct {
 	Image       string  `json:"image" db:"image"`
 	Size        *string `json:"size,omitzero" db:"size"`
 	Variant     *string `json:"variant,omitzero" db:"variant"`
+	SizeId      *int    `json:"sizeId,omitzero" db:"size_id"`
+	VariantId   *int    `json:"variantId,omitzero" db:"variant_id"`
 	Total       int     `json:"total" db:"total"`
 }

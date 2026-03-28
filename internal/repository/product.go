@@ -29,7 +29,15 @@ func (p *ProductRepository) GetAllProducts() (*[]models.Products, error) {
 				FROM categories c 
 				JOIN product_category pc ON pc.category_id = c.id 
 				WHERE pc.product_id = p.id
-			), '') as categories_list
+			), '') as categories_list,
+			COALESCE((
+				SELECT json_agg(json_build_object('id', id, 'name', name, 'addPrice', add_price))
+				FROM product_variant WHERE product_id = p.id
+			), '[]') as variants,
+			COALESCE((
+				SELECT json_agg(json_build_object('id', id, 'name', name, 'addPrice', add_price))
+				FROM product_size WHERE product_id = p.id
+			), '[]') as sizes
 		FROM products p
 	`
 	rows, err := p.db.Query(context.Background(), query)
@@ -45,7 +53,7 @@ func (p *ProductRepository) GetAllProducts() (*[]models.Products, error) {
 		err := rows.Scan(
 			&product.Id, &product.Name, &product.Description, &product.Quantity,
 			&product.Price, &product.Rating, &product.OldPrice, &product.IsFlashSale,
-			&product.Image, &categoriesList,
+			&product.Image, &categoriesList, &product.Variants, &product.Sizes,
 		)
 		if err != nil {
 			return &[]models.Products{}, err

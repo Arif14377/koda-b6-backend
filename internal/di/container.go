@@ -36,6 +36,10 @@ type Container struct {
 	cRepo    *repository.CartRepository
 	cService *service.CartService
 	cHandler *handler.CartHandler
+
+	tRepo    *repository.TransactionRepository
+	tService *service.TransactionService
+	tHandler *handler.TransactionHandler
 }
 
 func NewCointainer() *Container {
@@ -85,6 +89,10 @@ func (c *Container) initDependencies() {
 	c.cRepo = repository.NewCartRepository(c.db)
 	c.cService = service.NewCartService(c.cRepo)
 	c.cHandler = handler.NewCartHandler(c.cService)
+
+	c.tRepo = repository.NewTransactionRepository(c.db)
+	c.tService = service.NewTransactionService(c.tRepo, c.cRepo)
+	c.tHandler = handler.NewTransactionHandler(c.tService)
 }
 
 func (c *Container) UserHandler() *handler.UserHandler {
@@ -109,4 +117,8 @@ func (c *Container) ReviewHandler() *handler.ReviewHandler {
 
 func (c *Container) CartHandler() *handler.CartHandler {
 	return c.cHandler
+}
+
+func (c *Container) TransactionHandler() *handler.TransactionHandler {
+	return c.tHandler
 }

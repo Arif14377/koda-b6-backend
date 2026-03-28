@@ -36,9 +36,10 @@ type UserRegister struct {
 }
 
 type UserLogin struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Id       string `json:"id" db:"id"`
+	Email    string `json:"email" db:"email"`
+	Password string `json:"password" db:"password"`
+	FullName string `json:"fullName" db:"full_name"`
 }
 
 type SessionUser struct {
