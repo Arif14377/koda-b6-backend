@@ -74,9 +74,10 @@ func (a *AuthHandler) Login(ctx *gin.Context) {
 		Success: true,
 		Message: "Login berhasil.",
 		Results: gin.H{
-			"id":    user.Id,
-			"email": user.Email,
-			"token": token,
+			"id":       user.Id,
+			"email":    user.Email,
+			"fullName": user.FullName,
+			"token":    token,
 		},
 	})
 }

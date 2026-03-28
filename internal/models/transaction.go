@@ -13,10 +13,10 @@ type Transaction struct {
 	SubTotal       int               `json:"sub_total" db:"sub_total"`
 	Tax            int               `json:"tax" db:"tax"`
 	Total          int               `json:"total" db:"total"`
-	Date           time.Time         `json:"date" db:"date"`
+	Date           *time.Time        `json:"date" db:"date"`
 	Status         string            `json:"status" db:"status"`
 	PaymentMethod  string            `json:"payment_method" db:"payment_method"`
-	Items          []TransactionItem `json:"items,omitzero"`
+	Items          []TransactionItem `json:"items,omitzero" db:"-"`
 }
 
 type TransactionItem struct {

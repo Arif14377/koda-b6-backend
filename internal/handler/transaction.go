@@ -94,6 +94,7 @@ func (h *TransactionHandler) Checkout(ctx *gin.Context) {
 
 	var trx models.Transaction
 	if err := ctx.ShouldBindJSON(&trx); err != nil {
+		log.Printf("Gagal bind JSON checkout: %v. Body: %v", err, ctx.Request.Body)
 		ctx.JSON(http.StatusBadRequest, models.Response{
 			Success: false,
 			Message: "Input tidak valid",

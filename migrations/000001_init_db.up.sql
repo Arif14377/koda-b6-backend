@@ -3,7 +3,10 @@ CREATE TABLE IF NOT EXISTS products (
     name VARCHAR(100) NOT NULL,
     description VARCHAR(200) NOT NULL,
     quantity INT,
-    price BIGINT
+    price BIGINT,
+    rating INT DEFAULT 0,
+    old_price BIGINT,
+    is_flash_sale BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS product_variant (
@@ -40,7 +43,7 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    ID VARCHAR(36) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password TEXT,
@@ -57,12 +60,22 @@ CREATE TABLE IF NOT EXISTS cart (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(36),
     product_id int,
+    quantity int not null default 1,
+    size_id int,
+    variant_id int,
+    created_at TIMESTAMP DEFAULT now(),
     constraint fk_user
         foreign key(user_id)
         references users(id),
     constraint fk_products
         foreign key(product_id)
-        references products(id)
+        references products(id),
+    constraint fk_size
+        foreign key(size_id)
+        references product_size(id),
+    constraint fk_variant
+        foreign key(variant_id)
+        references product_variant(id)
 );
 
 
@@ -71,14 +84,16 @@ CREATE TABLE IF NOT EXISTS reviews (
     user_id VARCHAR(36),
     messages VARCHAR,
     rating INT CHECK (rating BETWEEN 1 AND 5),
-    created_at TIMESTAMP DEFAULT now()
-    CONSTRAINT users
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now(),
+    CONSTRAINT fk_user_review
         foreign key(user_id)
         references users(id)
 );
 
 CREATE TABLE IF NOT EXISTS transactions (
     id BIGSERIAL PRIMARY KEY,
+    user_id VARCHAR(36),
     trx_code VARCHAR(50) UNIQUE NOT NULL,
     delivery_method VARCHAR(60) NOT NULL,
     full_name VARCHAR(100),
@@ -89,20 +104,31 @@ CREATE TABLE IF NOT EXISTS transactions (
     total BIGINT,
     date TIMESTAMP DEFAULT now(),
     status VARCHAR(20),
-    payment_method VARCHAR(100)
+    payment_method VARCHAR(100),
+    CONSTRAINT fk_user_transaction
+        FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS transaction_product (
-    id SERIAL PRIMARY KEY,
-    product_id INT,
-    transaction_id INT,
-    quantity INT,
-    CONSTRAINT fk_product
-        FOREIGN KEY(product_id)
-        REFERENCES products(id),
-    CONSTRAINT fk_transaction
-        FOREIGN KEY(transaction_id)
-        REFERENCES transactions(id)
+    id serial PRIMARY KEY,
+    product_id int,
+    transaction_id int,
+    quantity int,
+    size_id int,
+    variant_id int,
+    price int,
+    constraint fk_product
+        foreign key(product_id)
+        references products(id),
+    constraint fk_transaction
+        foreign key(transaction_id)
+        references transactions(id),
+    constraint fk_size
+        foreign key(size_id)
+        references product_size(id),
+    constraint fk_variant
+        foreign key(variant_id)
+        references product_variant(id)
 );
 
 CREATE TABLE IF NOT EXISTS categories (

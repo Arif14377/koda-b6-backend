@@ -76,8 +76,8 @@ func (r *TransactionRepository) GetTransactionById(id int64, userId string) (*mo
 }
 
 func (r *TransactionRepository) CreateTransaction(ctx context.Context, tx pgx.Tx, trx models.Transaction) (int64, error) {
-	query := `INSERT INTO transactions (user_id, trx_code, delivery_method, full_name, email, address, sub_total, tax, total, status, payment_method) 
-              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`
+	query := `INSERT INTO transactions (user_id, trx_code, delivery_method, full_name, email, address, sub_total, tax, total, status, payment_method, date) 
+              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, CURRENT_TIMESTAMP) RETURNING id`
 
 	var id int64
 	err := tx.QueryRow(ctx, query, trx.UserId, trx.TrxCode, trx.DeliveryMethod, trx.FullName, trx.Email, trx.Address, trx.SubTotal, trx.Tax, trx.Total, trx.Status, trx.PaymentMethod).Scan(&id)
