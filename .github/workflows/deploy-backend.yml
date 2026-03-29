@@ -39,8 +39,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Login otomatis ke GHCR agar bisa pull image
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u arif14377 --password-stdin
             
             cd ~/server-arif/project-coffee-shop
             docker compose -f docker-compose.prod.yml pull backend pg redis migrate
