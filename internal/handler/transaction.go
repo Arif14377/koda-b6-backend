@@ -86,9 +86,9 @@ func (h *TransactionHandler) GetDetail(ctx *gin.Context) {
 	detail, err := h.service.GetDetail(id, userId)
 	if err != nil {
 		log.Printf("Gagal mendapatkan detail transaksi: %v", err)
-		ctx.JSON(http.StatusNotFound, models.Response{
+		ctx.JSON(http.StatusInternalServerError, models.Response{
 			Success: false,
-			Message: "Transaksi tidak ditemukan.",
+			Message: "Gagal mendapatkan detail transaksi.",
 		})
 		return
 	}

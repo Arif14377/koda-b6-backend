@@ -18,8 +18,16 @@ func NewTransactionRepository(db *pgxpool.Pool) *TransactionRepository {
 }
 
 func (r *TransactionRepository) GetHistoryByUserId(userId string) ([]models.Transaction, error) {
-	query := `SELECT id, user_id, trx_code, delivery_method, full_name, email, address, sub_total, tax, total, date, status, payment_method 
-              FROM transactions WHERE user_id = $1 ORDER BY date DESC`
+	query := `SELECT t.id, t.user_id, t.trx_code, t.delivery_method, t.full_name, t.email, t.address, t.sub_total, t.tax, t.total, t.date, t.status, t.payment_method,
+              COALESCE((
+                  SELECT pi.path 
+                  FROM transaction_product tp 
+                  JOIN product_images pi ON tp.product_id = pi.product_id 
+                  WHERE tp.transaction_id = t.id 
+                  ORDER BY tp.id ASC 
+                  LIMIT 1
+              ), '') as image
+              FROM transactions t WHERE t.user_id = $1 ORDER BY t.date DESC`
 	rows, err := r.db.Query(context.Background(), query, userId)
 	if err != nil {
 		return nil, err
@@ -35,8 +43,16 @@ func (r *TransactionRepository) GetHistoryByUserId(userId string) ([]models.Tran
 }
 
 func (r *TransactionRepository) GetTransactionById(id int64, userId string) (*models.Transaction, error) {
-	query := `SELECT id, user_id, trx_code, delivery_method, full_name, email, address, sub_total, tax, total, date, status, payment_method 
-              FROM transactions WHERE id = $1 AND user_id = $2`
+	query := `SELECT t.id, t.user_id, t.trx_code, t.delivery_method, t.full_name, t.email, t.address, t.sub_total, t.tax, t.total, t.date, t.status, t.payment_method,
+              COALESCE((
+                  SELECT pi.path 
+                  FROM transaction_product tp 
+                  JOIN product_images pi ON tp.product_id = pi.product_id 
+                  WHERE tp.transaction_id = t.id 
+                  ORDER BY tp.id ASC 
+                  LIMIT 1
+              ), '') as image
+              FROM transactions t WHERE t.id = $1 AND t.user_id = $2`
 	rows, err := r.db.Query(context.Background(), query, id, userId)
 	if err != nil {
 		return nil, err

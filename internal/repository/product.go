@@ -127,5 +127,25 @@ func (p *ProductRepository) GetProductById(id int) (*models.Products, error) {
 		rowsSizes.Close()
 	}
 
+	// Fetch Categories
+	queryCategories := `
+		SELECT c.name 
+		FROM categories c 
+		JOIN product_category pc ON pc.category_id = c.id 
+		WHERE pc.product_id = $1
+	`
+	rowsCategories, err := p.db.Query(context.Background(), queryCategories, id)
+	if err == nil {
+		var categories []string
+		for rowsCategories.Next() {
+			var catName string
+			if err := rowsCategories.Scan(&catName); err == nil {
+				categories = append(categories, catName)
+			}
+		}
+		product.Category = categories
+		rowsCategories.Close()
+	}
+
 	return &product, nil
 }

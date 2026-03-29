@@ -16,6 +16,7 @@ type Transaction struct {
 	Date           *time.Time        `json:"date" db:"date"`
 	Status         string            `json:"status" db:"status"`
 	PaymentMethod  string            `json:"payment_method" db:"payment_method"`
+	Image          string            `json:"image" db:"image"`
 	Items          []TransactionItem `json:"items,omitzero" db:"-"`
 }
 
