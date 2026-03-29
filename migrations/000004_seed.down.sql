@@ -1,0 +1,10 @@
+delete from products;
+delete from product_variant;
+delete from product_size;
+delete from roles;
+delete from users;
+delete from delivery_methods;
+delete from categories;
+delete from products_category;
+delete from reviews;
+delete from product_images;

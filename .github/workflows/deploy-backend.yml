@@ -41,7 +41,7 @@ jobs:
           script: |
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u arif14377 --password-stdin
             
-            cd ~/server-arif/project-coffee-shop
+            cd ~/server-arif
             docker compose -f docker-compose.prod.yml pull backend pg redis migrate
             docker compose -f docker-compose.prod.yml up -d backend pg redis migrate
             docker image prune -f

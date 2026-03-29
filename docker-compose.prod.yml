@@ -16,6 +16,8 @@ services:
   backend:
     image: ghcr.io/arif14377/koda-b6-backend:${BACKEND_IMAGE_TAG:-latest}
     restart: always
+    ports:
+      - "20102:8888"
     environment:
       - APP_ENV=production
       - PORT=8888
@@ -42,10 +44,7 @@ services:
   # Database / Postgres
   pg:
     image: postgres:17-alpine
-    container_name: postgres-arif
     restart: always
-    ports:
-      - "20102:5432"
     environment:
       - POSTGRES_DB=${PGDATABASE}
       - POSTGRES_USER=${PGUSER}
@@ -62,7 +61,6 @@ services:
   # Redis
   redis:
     image: redis:7-alpine
-    container_name: redis-arif
     restart: always
     command: redis-server --requirepass ${REDIS_SECRET}
     healthcheck:
@@ -77,7 +75,6 @@ services:
   # Migration
   migrate:
     image: migrate/migrate:v4.17.0
-    container_name: migrate-arif
     volumes:
       - ./migrations:/migrations
     command:
