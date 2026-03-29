@@ -15,6 +15,7 @@ services:
   # Backend
   backend:
     image: ghcr.io/arif14377/koda-b6-backend:${BACKEND_IMAGE_TAG:-latest}
+    container_name: backend-arif
     restart: always
     ports:
       - "20102:8888"

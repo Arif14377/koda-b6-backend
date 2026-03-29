@@ -19,7 +19,7 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Note: .env file not found. Using environment variables.")
 	}
 
 	container := di.NewCointainer()
@@ -52,6 +52,8 @@ func main() {
 	{
 		public.GET("/products", productHandler.GetAllProducts)
 		public.GET("/products/:id", productHandler.GetProductById)
+		public.PUT("/products/:id", productHandler.UpdateProduct)
+		public.DELETE("/products/:id", productHandler.DeleteProduct)
 		public.GET("/reviews", reviewHandler.GetAllReviews)
 	}
 

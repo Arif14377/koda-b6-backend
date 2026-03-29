@@ -5,32 +5,61 @@ import (
 	"errors"
 	"fmt"
 
+	"time"
+
 	"github.com/arif14377/koda-b6-backend/internal/models"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 )
 
 type ForgotPasswordRepository struct {
-	db *pgxpool.Pool
+	db    *pgxpool.Pool
+	redis *redis.Client
 }
 
-func NewForgotPasswordRepository(db *pgxpool.Pool) *ForgotPasswordRepository {
+func NewForgotPasswordRepository(db *pgxpool.Pool, rdb *redis.Client) *ForgotPasswordRepository {
 	return &ForgotPasswordRepository{
-		db: db,
+		db:    db,
+		redis: rdb,
 	}
 }
 
 func (fp *ForgotPasswordRepository) GenerateOTP(email string, otp int) {
-	cmdTag, _ := fp.db.Exec(context.Background(), "UPDATE forgot_password SET code = $1 WHERE email = $2", otp, email)
-	if cmdTag.RowsAffected() > 0 {
-		return
+	ctx := context.Background()
+	key := fmt.Sprintf("otp:%s", email)
+
+	// Simpan OTP di Redis dengan TTL 5 menit
+	err := fp.redis.Set(ctx, key, otp, 5*time.Minute).Err()
+	if err != nil {
+		fmt.Printf("Failed to save OTP to Redis: %v\n", err)
+		// Fallback ke DB jika Redis gagal (opsional, tapi di sini kita ikuti instruksi implementasi Redis)
 	}
 
-	fp.db.Exec(context.Background(), "INSERT INTO forgot_password (email, code) VALUES ($1, $2)", email, otp)
+	// Tetap simpan di DB sebagai backup atau jika sistem lain membutuhkannya (opsional)
+	cmdTag, _ := fp.db.Exec(ctx, "UPDATE forgot_password SET code = $1 WHERE email = $2", otp, email)
+	if cmdTag.RowsAffected() == 0 {
+		fp.db.Exec(ctx, "INSERT INTO forgot_password (email, code) VALUES ($1, $2)", email, otp)
+	}
 }
 
 func (fp *ForgotPasswordRepository) VerifikasiOTP(email string, otp int) (bool, error) {
-	rows, err := fp.db.Query(context.Background(), "SELECT email, code FROM forgot_password WHERE email = $1", email)
+	ctx := context.Background()
+	key := fmt.Sprintf("otp:%s", email)
+
+	// Cek di Redis dulu
+	val, err := fp.redis.Get(ctx, key).Result()
+	if err == nil {
+		if val == fmt.Sprintf("%d", otp) {
+			// Hapus OTP setelah diverifikasi agar tidak bisa dipakai lagi
+			fp.redis.Del(ctx, key)
+			return true, nil
+		}
+		return false, errors.New("Incorrect OTP")
+	}
+
+	// Jika di Redis tidak ada, cek di DB (fallback atau jika expired di Redis tapi belum di DB)
+	rows, err := fp.db.Query(ctx, "SELECT email, code FROM forgot_password WHERE email = $1", email)
 	if err != nil {
 		return false, errors.New("Failed to get rows")
 	}

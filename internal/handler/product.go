@@ -66,3 +66,50 @@ func (p *ProductHandler) GetProductById(ctx *gin.Context) {
 		Results: product,
 	})
 }
+
+func (p *ProductHandler) UpdateProduct(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	var id int
+	fmt.Sscanf(idStr, "%d", &id)
+
+	var data models.Products
+	if err := ctx.ShouldBindJSON(&data); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.Response{
+			Success: false,
+			Message: "Input tidak valid.",
+		})
+		return
+	}
+
+	if err := p.productService.UpdateProduct(id, data); err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Gagal update produk.",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Produk berhasil diupdate dan cache dibersihkan.",
+	})
+}
+
+func (p *ProductHandler) DeleteProduct(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	var id int
+	fmt.Sscanf(idStr, "%d", &id)
+
+	if err := p.productService.DeleteProduct(id); err != nil {
+		ctx.JSON(http.StatusInternalServerError, models.Response{
+			Success: false,
+			Message: "Gagal hapus produk.",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.Response{
+		Success: true,
+		Message: "Produk berhasil dihapus dan cache dibersihkan.",
+	})
+}

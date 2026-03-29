@@ -6,13 +6,16 @@ import (
 	"os"
 
 	"github.com/arif14377/koda-b6-backend/internal/handler"
+	"github.com/arif14377/koda-b6-backend/internal/infrastructure"
 	"github.com/arif14377/koda-b6-backend/internal/repository"
 	"github.com/arif14377/koda-b6-backend/internal/service"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 )
 
 type Container struct {
 	db          *pgxpool.Pool
+	redis       *redis.Client
 	userRepo    *repository.UserRepository
 	userService *service.UserService
 	userHandler *handler.UserHandler
@@ -57,7 +60,8 @@ func NewCointainer() *Container {
 	}
 
 	container := Container{
-		db: pool,
+		db:    pool,
+		redis: infrastructure.NewRedisClient(),
 	}
 
 	container.initDependencies()
@@ -70,7 +74,7 @@ func (c *Container) initDependencies() {
 	c.userService = service.NewUserService(c.userRepo)
 	c.userHandler = handler.NewUserHandler(c.userService)
 
-	c.fpRepo = repository.NewForgotPasswordRepository(c.db)
+	c.fpRepo = repository.NewForgotPasswordRepository(c.db, c.redis)
 	c.fpService = service.NewForgotPasswordService(c.fpRepo, c.userRepo)
 	c.fpHandler = handler.NewForgotPasswordHandler(c.fpService, c.userService)
 
@@ -78,7 +82,7 @@ func (c *Container) initDependencies() {
 	c.aService = service.NewAuthService(c.aRepo, c.userRepo)
 	c.aHandler = handler.NewAuthHandler(c.aService)
 
-	c.pRepo = repository.NewProductRepository(c.db)
+	c.pRepo = repository.NewProductRepository(c.db, c.redis)
 	c.pService = service.NewProductService(c.pRepo)
 	c.pHandler = handler.NewProductHandler(c.pService)
 
