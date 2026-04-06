@@ -31,10 +31,9 @@ func AuthMiddleware() gin.HandlerFunc {
 			secret = "coffee-shop-secret"
 		}
 
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 			return []byte(secret), nil
 		})
-
 		if err != nil || !token.Valid {
 			c.JSON(http.StatusUnauthorized, gin.H{"success": false, "message": "Token tidak valid atau kadaluarsa."})
 			c.Abort()

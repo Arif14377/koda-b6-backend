@@ -37,15 +37,15 @@ func main() {
 	{
 		users.GET("", userHandler.GetAllUser)
 		users.POST("/by-email", userHandler.GetUserByEmail)
-		users.POST("/forgot-password", forgotPasswordHandler.GenerateOTP)
-		users.POST("/forgot-password/verifikasi-otp", forgotPasswordHandler.VerifikasiOTP)
-		users.PATCH("/forgot-password/change", forgotPasswordHandler.ChangePassword)
 	}
 
 	auth := r.Group("/auth")
 	{
 		auth.POST("/login", authHandler.Login)
 		auth.POST("/register", authHandler.Register)
+		auth.POST("/forgot-password", forgotPasswordHandler.GenerateOTP)
+		auth.POST("/forgot-password/verifikasi-otp", forgotPasswordHandler.VerifikasiOTP)
+		auth.PATCH("/forgot-password/change", forgotPasswordHandler.ChangePassword)
 	}
 
 	public := r.Group("/")
