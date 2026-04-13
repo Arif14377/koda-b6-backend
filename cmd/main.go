@@ -79,7 +79,7 @@ func main() {
 
 	err = r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf("failed to start server: \n%v", err)
 		return
 	}
 }

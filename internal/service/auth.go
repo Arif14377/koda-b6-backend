@@ -84,9 +84,6 @@ func (a *AuthService) Login(email, password string) (*models.UserLogin, string, 
 	})
 
 	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		secret = "coffee-shop-secret" // fallback
-	}
 
 	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {

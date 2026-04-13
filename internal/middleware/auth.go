@@ -27,9 +27,6 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		tokenString := parts[1]
 		secret := os.Getenv("JWT_SECRET")
-		if secret == "" {
-			secret = "coffee-shop-secret"
-		}
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 			return []byte(secret), nil

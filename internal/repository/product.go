@@ -114,6 +114,7 @@ func (p *ProductRepository) GetProductById(id int) (*models.Products, error) {
 		}
 	}
 
+	// Fetch data products
 	queryProduct := `
 		SELECT id, name, description, quantity, price, rating, old_price, is_flash_sale
 		FROM products
