@@ -2,16 +2,15 @@ package cors
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		FRONTEND_URL := os.Getenv("FRONTEND_URL")
+		FRONTEND_URL := "http://68.183.226.223:20101/"
 
-		c.Writer.Header().Set("Access-Control-Allow-Origin", FRONTEND_URL) // development
+		c.Writer.Header().Set("Access-Control-Allow-Origin", FRONTEND_URL)
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, PATCH")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
